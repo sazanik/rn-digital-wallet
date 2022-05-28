@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Modal, StyleSheet, Text, TextInput, View } from 'react-native';
 import { IconButton } from '../Buttons/IconButton';
 import { CrossSVG } from '../../assets/SVGs/CrossSVG';
@@ -13,6 +13,7 @@ import { Fields } from '../../types/Fields';
 import { ActionsTypes } from '../../types/ActionsTypes';
 import { State } from '../../types/State';
 import { TransactionsTypes } from '../../types/TransactionsTypes';
+import { checkInvalidData } from '../../utils/checkInvalidData';
 
 interface Props {
   dispatch: React.Dispatch<{ type: ActionsTypes; payload: any }>;
@@ -24,6 +25,7 @@ interface Props {
 export const PrimaryModal = ({ onClose, visible, state, dispatch }: Props) => {
   const [activeId, setActiveId] = useState<ToggleIds>(0);
   const [formData, setFormData] = useState<Transaction | null>(null);
+  const [isDisabled, setDisabled] = useState<boolean>(true);
 
   const handleToggle = (id: ToggleIds) => {
     setActiveId(id);
@@ -51,9 +53,9 @@ export const PrimaryModal = ({ onClose, visible, state, dispatch }: Props) => {
   const handleOnPress = () => {
     const newBalance = {
       [TransactionsTypes.INCOME]:
-        Number(state.currentCard?.balance) + Number(formData?.amount),
+        Number(state.activeCard?.balance) + Number(formData?.amount),
       [TransactionsTypes.EXPENSE]:
-        Number(state.currentCard?.balance) - Number(formData?.amount),
+        Number(state.activeCard?.balance) - Number(formData?.amount),
     };
 
     dispatch({
@@ -64,6 +66,12 @@ export const PrimaryModal = ({ onClose, visible, state, dispatch }: Props) => {
 
     setFormData(null);
   };
+
+  useEffect(() => {
+    setDisabled(checkInvalidData(formData));
+  }, [formData]);
+
+  console.log(isDisabled);
 
   return (
     <Modal animationType="fade" transparent={true} visible={visible}>
@@ -97,13 +105,17 @@ export const PrimaryModal = ({ onClose, visible, state, dispatch }: Props) => {
               value={formData?.comment}
               style={styles.input}
               keyboardType="default"
-              maxLength={30}
+              maxLength={20}
               placeholder="comment"
               onChangeText={value => handleChangeText('comment', value)}
             />
           </View>
           <View style={styles.buttonRow}>
-            <PrimaryButton title="Save" onPress={handleOnPress} />
+            <PrimaryButton
+              disabled={isDisabled}
+              title="Save"
+              onPress={handleOnPress}
+            />
           </View>
         </View>
       </View>

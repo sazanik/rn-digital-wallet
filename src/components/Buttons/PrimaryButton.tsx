@@ -6,9 +6,10 @@ import { colors } from '../../constants/colors';
 interface Props {
   title?: string;
   onPress?: () => void;
+  disabled?: boolean;
 }
 
-export const PrimaryButton = ({ title, onPress }: Props) => {
+export const PrimaryButton = ({ title, onPress, disabled }: Props) => {
   const handlePress = () => {
     if (onPress) {
       onPress();
@@ -17,11 +18,16 @@ export const PrimaryButton = ({ title, onPress }: Props) => {
 
   return (
     <Pressable
+      disabled={disabled}
       onPress={handlePress}
       style={({ pressed }) => pressed && { opacity: 0.8 }}>
       <LinearGradient
         style={styles.button}
-        colors={[colors.darkBlueGradient, colors.lightBlueGradient]}
+        colors={
+          disabled
+            ? [colors.lightGrey, colors.lightGrey]
+            : [colors.darkBlueGradient, colors.lightBlueGradient]
+        }
         start={{ x: 0, y: 0.5 }}
         end={{ x: 1, y: 0.5 }}>
         <Text style={styles.title}>{title}</Text>

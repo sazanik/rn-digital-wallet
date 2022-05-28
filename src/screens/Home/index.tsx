@@ -11,7 +11,7 @@ import { State } from '../../types/State';
 
 const initialState: State = {
   cards: [],
-  currentCard: {
+  activeCard: {
     name: 'Default',
     balance: 0,
     transactions: [],
@@ -28,10 +28,10 @@ const reducer = (
     case ActionsTypes.ADD_TRANSACTION:
       return {
         ...state,
-        currentCard: {
-          ...state.currentCard,
+        activeCard: {
+          ...state.activeCard,
           transactions: [
-            ...(state.currentCard?.transactions || []),
+            ...(state.activeCard?.transactions || []),
             action.payload as TransactionProps,
           ],
         },
@@ -39,8 +39,8 @@ const reducer = (
     case ActionsTypes.UPDATE_BALANCE:
       return {
         ...state,
-        currentCard: {
-          ...state.currentCard,
+        activeCard: {
+          ...state.activeCard,
           balance: action.payload,
         },
       };
@@ -69,7 +69,7 @@ export const Home = (): JSX.Element => {
 
   return (
     <View style={commonStyles.root}>
-      {state.currentCard && (
+      {state.activeCard && (
         <PrimaryModal
           visible={isModalVisible}
           onClose={handleCloseModal}
@@ -81,16 +81,13 @@ export const Home = (): JSX.Element => {
       <View style={styles.container}>
         <Text style={styles.title}>Home</Text>
         <View style={styles.cards}>
-          {state.currentCard && (
-            <Card
-              onPressAdd={handleOpenModal}
-              currentCard={state.currentCard}
-            />
+          {state.activeCard && (
+            <Card onPressAdd={handleOpenModal} activeCard={state.activeCard} />
           )}
         </View>
         <Text style={styles.subtitle}>Last transactions</Text>
         <FlatList
-          data={state.currentCard?.transactions}
+          data={state.activeCard?.transactions}
           renderItem={renderTransaction}
           keyExtractor={item => String(item.amount) + item.comment}
         />

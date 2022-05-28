@@ -10,10 +10,10 @@ import { Card as CardProps } from '../../types/Card';
 
 interface Props {
   onPressAdd: () => void;
-  currentCard: CardProps;
+  activeCard: CardProps;
 }
 
-export const Card = ({ currentCard, onPressAdd }: Props) => {
+export const Card = ({ activeCard, onPressAdd }: Props) => {
   const handlePress = useCallback(() => {
     if (onPressAdd) {
       onPressAdd();
@@ -28,7 +28,7 @@ export const Card = ({ currentCard, onPressAdd }: Props) => {
         start={{ x: 0, y: 0.5 }}
         end={{ x: 1, y: 0.5 }}>
         <View style={styles.row}>
-          <Text style={[styles.text, styles.name]}>{currentCard.name}</Text>
+          <Text style={[styles.text, styles.name]}>{activeCard.name}</Text>
           <IconButton onPress={handlePress}>
             <AddSVG />
           </IconButton>
@@ -38,7 +38,7 @@ export const Card = ({ currentCard, onPressAdd }: Props) => {
             style={[
               styles.text,
               styles.balance,
-            ]}>{`$${currentCard.balance}`}</Text>
+            ]}>{`$${activeCard.balance}`}</Text>
         </View>
         <View style={styles.row}>
           <Text style={[styles.text, styles.number]}>12** **** **** 3456</Text>

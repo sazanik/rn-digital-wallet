@@ -2,5 +2,5 @@ import { Card } from './Card';
 
 export interface State {
   cards: Card[];
-  currentCard: Card | null;
+  activeCard: Card | null;
 }
