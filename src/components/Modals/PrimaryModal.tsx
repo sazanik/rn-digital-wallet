@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import { Modal, StyleSheet, Text, TextInput, View } from 'react-native';
 import { IconButton } from '../Buttons/IconButton';
 import { CrossSVG } from '../../assets/SVGs/CrossSVG';
 import { PrimaryButton } from '../Buttons/PrimaryButton';
 import { commonStyles } from '../../constants/commonStyles';
 import { colors } from '../../constants/colors';
+import { Toggle } from '../Toggle';
+import { transactionsOptions } from '../Toggle/options';
+import { toggleIds } from '../../types/toggleIds';
 
 interface Props {
   visible?: boolean;
@@ -13,6 +16,14 @@ interface Props {
 }
 
 export const PrimaryModal = ({ onDone, onClose, visible }: Props) => {
+  const [activeOptionId, setActiveOptionId] = useState<toggleIds>(0);
+
+  console.log(activeOptionId);
+
+  const handleToggle = useCallback((id: toggleIds) => {
+    setActiveOptionId(id);
+  }, []);
+
   const handlePressButton = () => {
     if (onDone) {
       onDone();
@@ -36,6 +47,13 @@ export const PrimaryModal = ({ onDone, onClose, visible }: Props) => {
               </IconButton>
             </View>
             <Text style={styles.modalTitle}>New transaction</Text>
+            <View style={styles.toggleRow}>
+              <Toggle
+                options={transactionsOptions}
+                onToggle={handleToggle}
+                activeId={activeOptionId}
+              />
+            </View>
           </View>
           <View style={styles.formRow}>
             <TextInput
@@ -81,12 +99,17 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   modalTitle: {
+    marginBottom: 8,
+    textAlign: 'center',
     fontSize: 18,
     lineHeight: 26,
     color: colors.black,
     fontWeight: '600',
   },
-  textRow: {},
+  toggleRow: {
+    ...commonStyles.row,
+    justifyContent: 'center',
+  },
   formRow: {
     width: '100%',
     height: 120,

@@ -40,6 +40,7 @@ export const Home = (): JSX.Element => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    width: '90%',
     marginTop: 20,
   },
   title: {
