@@ -7,32 +7,49 @@ import { commonStyles } from '../../constants/commonStyles';
 import { colors } from '../../constants/colors';
 import { Toggle } from '../Toggle';
 import { transactionsOptions } from '../Toggle/options';
-import { toggleIds } from '../../types/toggleIds';
+import { ToggleIds } from '../../types/ToggleIds';
+import { Transaction } from '../../types/Transaction';
+import { Fields } from '../../types/Fields';
 
 interface Props {
   visible?: boolean;
   onClose: () => void;
-  onDone: () => void;
+  onSubmit: (value: Transaction) => void;
 }
 
-export const PrimaryModal = ({ onDone, onClose, visible }: Props) => {
-  const [activeOptionId, setActiveOptionId] = useState<toggleIds>(0);
+export const PrimaryModal = ({ onSubmit, onClose, visible }: Props) => {
+  const [activeId, setActiveId] = useState<ToggleIds>(0);
+  const [formData, setFormData] = useState<Transaction | null>(null);
 
-  console.log(activeOptionId);
+  console.log(formData);
 
-  const handleToggle = useCallback((id: toggleIds) => {
-    setActiveOptionId(id);
-  }, []);
-
-  const handlePressButton = () => {
-    if (onDone) {
-      onDone();
-    }
+  const handleToggle = (id: ToggleIds) => {
+    setActiveId(id);
   };
 
   const handleCloseModal = () => {
     if (onClose) {
       onClose();
+    }
+  };
+
+  const handleChangeText = useCallback(
+    (field: Fields, value: string) => {
+      setFormData({
+        amount: '',
+        comment: '',
+        ...formData,
+        [field]: value,
+        type: transactionsOptions[activeId],
+      });
+    },
+    [activeId, formData],
+  );
+
+  const handleOnPress = () => {
+    if (onSubmit && formData) {
+      onSubmit(formData);
+      setFormData(null);
     }
   };
 
@@ -51,26 +68,30 @@ export const PrimaryModal = ({ onDone, onClose, visible }: Props) => {
               <Toggle
                 options={transactionsOptions}
                 onToggle={handleToggle}
-                activeId={activeOptionId}
+                activeId={activeId}
               />
             </View>
           </View>
           <View style={styles.formRow}>
             <TextInput
+              value={formData?.amount}
               style={styles.input}
               keyboardType="numeric"
               maxLength={7}
               placeholder="amount $"
+              onChangeText={value => handleChangeText('amount', value)}
             />
             <TextInput
+              value={formData?.comment}
               style={styles.input}
               keyboardType="default"
               maxLength={30}
               placeholder="comment"
+              onChangeText={value => handleChangeText('comment', value)}
             />
           </View>
           <View style={styles.buttonRow}>
-            <PrimaryButton title="Add" onPress={handlePressButton} />
+            <PrimaryButton title="Save" onPress={handleOnPress} />
           </View>
         </View>
       </View>

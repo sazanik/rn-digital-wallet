@@ -1,15 +1,15 @@
 import React, { useCallback } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { colors } from '../../constants/colors';
-import { toggleIds } from '../../types/toggleIds';
+import { ToggleIds } from '../../types/ToggleIds';
 
 interface Props {
-  options: Record<toggleIds, string>;
-  activeId: toggleIds;
-  onToggle: (id: toggleIds) => void;
+  options: Record<ToggleIds, string>;
+  activeId?: ToggleIds;
+  onToggle: (id: ToggleIds) => void;
 }
 
-export const Toggle = ({ options, onToggle, activeId }: Props) => {
+export const Toggle = ({ options, onToggle, activeId = 0 }: Props) => {
   const updateToggleData = useCallback(
     (id: 0 | 1) => {
       if (onToggle) {

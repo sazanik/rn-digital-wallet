@@ -18,7 +18,7 @@ export const PrimaryButton = ({ title, onPress }: Props) => {
   return (
     <Pressable
       onPress={handlePress}
-      style={({ pressed }) => pressed && { opacity: 0.7 }}>
+      style={({ pressed }) => pressed && { opacity: 0.8 }}>
       <LinearGradient
         style={styles.button}
         colors={[colors.darkBlueGradient, colors.lightBlueGradient]}

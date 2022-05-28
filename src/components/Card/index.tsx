@@ -10,15 +10,15 @@ import { IconButton } from '../Buttons/IconButton';
 interface Props {
   name: string;
   initialBalance?: number;
-  onAddCard: () => void;
+  onPressAdd: () => void;
 }
 
-export const Card = ({ name, onAddCard, initialBalance = 0 }: Props) => {
+export const Card = ({ name, onPressAdd, initialBalance = 0 }: Props) => {
   const handlePress = useCallback(() => {
-    if (onAddCard) {
-      onAddCard();
+    if (onPressAdd) {
+      onPressAdd();
     }
-  }, [onAddCard]);
+  }, [onPressAdd]);
 
   return (
     <View style={styles.root}>

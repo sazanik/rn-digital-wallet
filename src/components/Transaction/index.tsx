@@ -4,12 +4,7 @@ import { commonStyles } from '../../constants/commonStyles';
 import { colors } from '../../constants/colors';
 import { UpSVG } from '../../assets/SVGs/UpSVG';
 import { DownSVG } from '../../assets/SVGs/DownSVG';
-
-interface Props {
-  type: 'income' | 'expense';
-  amount: number;
-  comment?: string;
-}
+import { Transaction as TransactionProps } from '../../types/Transaction';
 
 const icon = {
   income: <UpSVG />,
@@ -21,7 +16,7 @@ const mark = {
   expense: '-',
 };
 
-export const Transaction = ({ amount, comment, type }: Props) => {
+export const Transaction = ({ amount, comment, type }: TransactionProps) => {
   const currentDate = new Date().toDateString();
   console.log(currentDate);
 

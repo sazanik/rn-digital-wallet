@@ -6,10 +6,15 @@ import { commonStyles } from '../../constants/commonStyles';
 import { PrimaryModal } from '../../components/Modals/PrimaryModal';
 import { Transaction } from '../../components/Transaction';
 
+interface Transactions {}
+
 export const Home = (): JSX.Element => {
   const [isModalVisible, setModalVisible] = useState(false);
+  const [transactions, setTransactions] = useState<Transactions[]>([]);
 
-  const handleAddCard = () => {
+  console.log(transactions);
+
+  const handleOpenModal = () => {
     setModalVisible(true);
   };
 
@@ -17,21 +22,25 @@ export const Home = (): JSX.Element => {
     setModalVisible(false);
   };
 
+  const handleSaveTransaction = (transaction: Transactions) => {
+    setTransactions(prevState => [...prevState, transaction]);
+  };
+
   return (
     <View style={commonStyles.root}>
       <PrimaryModal
         visible={isModalVisible}
         onClose={handleCloseModal}
-        onDone={handleAddCard}
+        onSubmit={handleSaveTransaction}
       />
       <View style={styles.container}>
         <Text style={styles.title}>Home</Text>
         <View style={styles.cards}>
-          <Card onAddCard={handleAddCard} name="MTBank" />
+          <Card onPressAdd={handleOpenModal} name="MTBank" />
         </View>
         <Text style={styles.subtitle}>Last transactions</Text>
-        <Transaction type="expense" amount={30000} comment="Buy car" />
-        <Transaction type="income" amount={10000} comment="Salary" />
+        <Transaction type="expense" amount="30.000" comment="Bought a car" />
+        <Transaction type="income" amount="10.000" comment="Salary" />
       </View>
     </View>
   );
