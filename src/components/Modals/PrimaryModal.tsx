@@ -42,12 +42,12 @@ export const PrimaryModal = ({ onDone, onClose, visible }: Props) => {
               style={styles.input}
               keyboardType="numeric"
               maxLength={7}
-              placeholder="count $"
+              placeholder="amount $"
             />
             <TextInput
               style={styles.input}
               keyboardType="default"
-              maxLength={70}
+              maxLength={30}
               placeholder="comment"
             />
           </View>
