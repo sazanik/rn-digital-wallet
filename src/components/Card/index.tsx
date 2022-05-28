@@ -1,11 +1,11 @@
 import React, { useCallback } from 'react';
-
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { colors } from '../../constants/colors';
 import { AddSVG } from '../../assets/SVGs/AddSVG';
 import { VisaSVG } from '../../assets/SVGs/VisaSVG';
 import { commonStyles } from '../../constants/commonStyles';
+import { IconButton } from '../Buttons/IconButton';
 
 interface Props {
   name: string;
@@ -29,24 +29,9 @@ export const Card = ({ name, onAddCard, initialBalance = 0 }: Props) => {
         end={{ x: 1, y: 0.5 }}>
         <View style={styles.row}>
           <Text style={[styles.text, styles.name]}>{name}</Text>
-          <Pressable
-            hitSlop={{
-              bottom: 20,
-              left: 20,
-              right: 20,
-              top: 20,
-            }}
-            style={({ pressed }) =>
-              pressed && [
-                styles.iconWrapper,
-                { backgroundColor: colors.transparentGrey },
-              ]
-            }
-            onPress={handlePress}>
-            <View style={styles.iconWrapper}>
-              <AddSVG />
-            </View>
-          </Pressable>
+          <IconButton onPress={handlePress}>
+            <AddSVG />
+          </IconButton>
         </View>
         <View style={styles.row}>
           <Text style={[styles.text, styles.balance]}>
@@ -113,5 +98,4 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 24,
   },
-  iconWrapper: commonStyles.iconWrapper,
 });
