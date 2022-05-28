@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
@@ -10,12 +10,15 @@ import { commonStyles } from '../../constants/commonStyles';
 interface Props {
   name: string;
   initialBalance?: number;
+  onAddCard: () => void;
 }
 
-export const Card = ({ name, initialBalance = 0 }: Props) => {
-  const handlePress = () => {
-    console.log('handlePress');
-  };
+export const Card = ({ name, onAddCard, initialBalance = 0 }: Props) => {
+  const handlePress = useCallback(() => {
+    if (onAddCard) {
+      onAddCard();
+    }
+  }, [onAddCard]);
 
   return (
     <View style={styles.root}>
@@ -80,7 +83,10 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 20,
   },
-  row: commonStyles.row,
+  row: {
+    ...commonStyles.row,
+    justifyContent: 'space-between',
+  },
   text: {
     color: colors.white,
   },

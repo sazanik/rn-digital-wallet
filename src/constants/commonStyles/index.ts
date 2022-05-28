@@ -1,12 +1,11 @@
 export const commonStyles = {
-  centeredBox: {
+  root: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
   row: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
   },
   iconWrapper: {
