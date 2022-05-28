@@ -5,6 +5,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import { colors } from '../../constants/colors';
 import { AddSVG } from '../../assets/SVGs/AddSVG';
 import { VisaSVG } from '../../assets/SVGs/VisaSVG';
+import { commonStyles } from '../../constants/commonStyles';
 
 interface Props {
   name: string;
@@ -32,7 +33,12 @@ export const Card = ({ name, initialBalance = 0 }: Props) => {
               right: 20,
               top: 20,
             }}
-            style={({ pressed }) => pressed && styles.pressedWrapper}
+            style={({ pressed }) =>
+              pressed && [
+                styles.iconWrapper,
+                { backgroundColor: colors.transparentGrey },
+              ]
+            }
             onPress={handlePress}>
             <View style={styles.iconWrapper}>
               <AddSVG />
@@ -58,6 +64,7 @@ export const Card = ({ name, initialBalance = 0 }: Props) => {
 
 const styles = StyleSheet.create({
   root: {
+    flex: 1,
     width: 330,
     height: 200,
     shadowColor: colors.black,
@@ -73,11 +80,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 20,
   },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
+  row: commonStyles.row,
   text: {
     color: colors.white,
   },
@@ -104,17 +107,5 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 24,
   },
-  iconWrapper: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: 40,
-    height: 40,
-    borderRadius: 50,
-  },
-  pressedWrapper: {
-    width: 40,
-    height: 40,
-    borderRadius: 50,
-    backgroundColor: colors.transparentGrey,
-  },
+  iconWrapper: commonStyles.iconWrapper,
 });
