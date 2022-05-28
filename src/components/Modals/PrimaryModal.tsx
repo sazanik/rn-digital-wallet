@@ -10,18 +10,20 @@ import { transactionsOptions } from '../Toggle/options';
 import { ToggleIds } from '../../types/ToggleIds';
 import { Transaction } from '../../types/Transaction';
 import { Fields } from '../../types/Fields';
+import { ActionsTypes } from '../../types/ActionsTypes';
+import { State } from '../../types/State';
+import { TransactionsTypes } from '../../types/TransactionsTypes';
 
 interface Props {
+  dispatch: React.Dispatch<{ type: ActionsTypes; payload: any }>;
+  state: State;
   visible?: boolean;
   onClose: () => void;
-  onSubmit: (value: Transaction) => void;
 }
 
-export const PrimaryModal = ({ onSubmit, onClose, visible }: Props) => {
+export const PrimaryModal = ({ onClose, visible, state, dispatch }: Props) => {
   const [activeId, setActiveId] = useState<ToggleIds>(0);
   const [formData, setFormData] = useState<Transaction | null>(null);
-
-  console.log(formData);
 
   const handleToggle = (id: ToggleIds) => {
     setActiveId(id);
@@ -47,10 +49,20 @@ export const PrimaryModal = ({ onSubmit, onClose, visible }: Props) => {
   );
 
   const handleOnPress = () => {
-    if (onSubmit && formData) {
-      onSubmit(formData);
-      setFormData(null);
-    }
+    const newBalance = {
+      [TransactionsTypes.INCOME]:
+        Number(state.currentCard?.balance) + Number(formData?.amount),
+      [TransactionsTypes.EXPENSE]:
+        Number(state.currentCard?.balance) - Number(formData?.amount),
+    };
+
+    dispatch({
+      type: ActionsTypes.UPDATE_BALANCE,
+      payload: newBalance[transactionsOptions[activeId]],
+    });
+    dispatch({ type: ActionsTypes.ADD_TRANSACTION, payload: formData });
+
+    setFormData(null);
   };
 
   return (

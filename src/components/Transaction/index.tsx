@@ -5,20 +5,15 @@ import { colors } from '../../constants/colors';
 import { UpSVG } from '../../assets/SVGs/UpSVG';
 import { DownSVG } from '../../assets/SVGs/DownSVG';
 import { Transaction as TransactionProps } from '../../types/Transaction';
+import { marksTypes } from '../../constants/marksTypes';
 
 const icon = {
   income: <UpSVG />,
   expense: <DownSVG />,
 };
 
-const mark = {
-  income: '+',
-  expense: '-',
-};
-
 export const Transaction = ({ amount, comment, type }: TransactionProps) => {
   const currentDate = new Date().toDateString();
-  console.log(currentDate);
 
   return (
     <View style={styles.root}>
@@ -27,7 +22,7 @@ export const Transaction = ({ amount, comment, type }: TransactionProps) => {
         <Text style={styles.comment}>{comment}</Text>
         <Text style={styles.date}>{currentDate}</Text>
       </View>
-      <Text style={styles.amount}>{`${mark[type]}$${amount}.00`}</Text>
+      <Text style={styles.amount}>{`${marksTypes[type]}$${amount}.00`}</Text>
     </View>
   );
 };

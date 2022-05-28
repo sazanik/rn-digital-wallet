@@ -1,5 +1,7 @@
+import { TransactionsTypes } from './TransactionsTypes';
+
 export interface Transaction {
-  type: 'income' | 'expense';
+  type: TransactionsTypes;
   amount: string;
   comment?: string;
 }

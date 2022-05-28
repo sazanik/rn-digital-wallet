@@ -6,14 +6,14 @@ import { AddSVG } from '../../assets/SVGs/AddSVG';
 import { VisaSVG } from '../../assets/SVGs/VisaSVG';
 import { commonStyles } from '../../constants/commonStyles';
 import { IconButton } from '../Buttons/IconButton';
+import { Card as CardProps } from '../../types/Card';
 
 interface Props {
-  name: string;
-  initialBalance?: number;
   onPressAdd: () => void;
+  currentCard: CardProps;
 }
 
-export const Card = ({ name, onPressAdd, initialBalance = 0 }: Props) => {
+export const Card = ({ currentCard, onPressAdd }: Props) => {
   const handlePress = useCallback(() => {
     if (onPressAdd) {
       onPressAdd();
@@ -28,15 +28,17 @@ export const Card = ({ name, onPressAdd, initialBalance = 0 }: Props) => {
         start={{ x: 0, y: 0.5 }}
         end={{ x: 1, y: 0.5 }}>
         <View style={styles.row}>
-          <Text style={[styles.text, styles.name]}>{name}</Text>
+          <Text style={[styles.text, styles.name]}>{currentCard.name}</Text>
           <IconButton onPress={handlePress}>
             <AddSVG />
           </IconButton>
         </View>
         <View style={styles.row}>
-          <Text style={[styles.text, styles.balance]}>
-            {`$ ${initialBalance}`}
-          </Text>
+          <Text
+            style={[
+              styles.text,
+              styles.balance,
+            ]}>{`$${currentCard.balance}`}</Text>
         </View>
         <View style={styles.row}>
           <Text style={[styles.text, styles.number]}>12** **** **** 3456</Text>

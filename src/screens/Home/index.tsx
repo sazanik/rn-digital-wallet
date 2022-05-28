@@ -1,18 +1,59 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useReducer, useState } from 'react';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { colors } from '../../constants/colors';
 import { Card } from '../../components/Card';
 import { commonStyles } from '../../constants/commonStyles';
 import { PrimaryModal } from '../../components/Modals/PrimaryModal';
+import { Transaction as TransactionProps } from '../../types/Transaction';
 import { Transaction } from '../../components/Transaction';
+import { ActionsTypes } from '../../types/ActionsTypes';
+import { State } from '../../types/State';
 
-interface Transactions {}
+const initialState: State = {
+  cards: [],
+  currentCard: {
+    name: 'Default',
+    balance: 0,
+    transactions: [],
+  },
+};
+
+const reducer = (
+  state: State,
+  action: { type: ActionsTypes; payload: any },
+): State => {
+  switch (action.type) {
+    case ActionsTypes.ADD_NEW_CARD:
+      return state;
+    case ActionsTypes.ADD_TRANSACTION:
+      return {
+        ...state,
+        currentCard: {
+          ...state.currentCard,
+          transactions: [
+            ...(state.currentCard?.transactions || []),
+            action.payload as TransactionProps,
+          ],
+        },
+      };
+    case ActionsTypes.UPDATE_BALANCE:
+      return {
+        ...state,
+        currentCard: {
+          ...state.currentCard,
+          balance: action.payload,
+        },
+      };
+    case ActionsTypes.SET_ACTIVE_CARD:
+      return state;
+    default:
+      return state;
+  }
+};
 
 export const Home = (): JSX.Element => {
+  const [state, dispatch] = useReducer(reducer, initialState);
   const [isModalVisible, setModalVisible] = useState(false);
-  const [transactions, setTransactions] = useState<Transactions[]>([]);
-
-  console.log(transactions);
 
   const handleOpenModal = () => {
     setModalVisible(true);
@@ -22,25 +63,37 @@ export const Home = (): JSX.Element => {
     setModalVisible(false);
   };
 
-  const handleSaveTransaction = (transaction: Transactions) => {
-    setTransactions(prevState => [...prevState, transaction]);
-  };
+  const renderTransaction = ({ item }: { item: TransactionProps }) => (
+    <Transaction type={item.type} amount={item.amount} comment={item.comment} />
+  );
 
   return (
     <View style={commonStyles.root}>
-      <PrimaryModal
-        visible={isModalVisible}
-        onClose={handleCloseModal}
-        onSubmit={handleSaveTransaction}
-      />
+      {state.currentCard && (
+        <PrimaryModal
+          visible={isModalVisible}
+          onClose={handleCloseModal}
+          dispatch={dispatch}
+          state={state}
+        />
+      )}
+
       <View style={styles.container}>
         <Text style={styles.title}>Home</Text>
         <View style={styles.cards}>
-          <Card onPressAdd={handleOpenModal} name="MTBank" />
+          {state.currentCard && (
+            <Card
+              onPressAdd={handleOpenModal}
+              currentCard={state.currentCard}
+            />
+          )}
         </View>
         <Text style={styles.subtitle}>Last transactions</Text>
-        <Transaction type="expense" amount="30.000" comment="Bought a car" />
-        <Transaction type="income" amount="10.000" comment="Salary" />
+        <FlatList
+          data={state.currentCard?.transactions}
+          renderItem={renderTransaction}
+          keyExtractor={item => String(item.amount) + item.comment}
+        />
       </View>
     </View>
   );
