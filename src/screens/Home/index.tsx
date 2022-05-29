@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useReducer } from 'react';
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 import { colors } from '../../constants/colors';
 import { commonStyles } from '../../constants/commonStyles';
 import { TransactionModal } from '../../components/Modals/TransactionModal';
@@ -12,22 +12,12 @@ import { ModalTypes } from '../../constants/ModalTypes';
 import { Card as CardProps } from '../../models/Card';
 import { Card } from '../../components/Cards';
 import { isEmptyObject } from '../../utils/IsEmptyObject';
+import { CardModal } from '../../components/Modals/CardModal';
 
 const initialState: State = {
   activeModal: null,
-  activeCard: 'Default',
-  cards: {
-    Default: {
-      name: 'Default',
-      balance: 0,
-      transactions: [],
-    },
-    Mtbank: {
-      name: 'Mtbank',
-      balance: 1000,
-      transactions: [],
-    },
-  },
+  activeCard: null,
+  cards: {},
 };
 
 const reducer = (
@@ -48,7 +38,13 @@ const reducer = (
       };
 
     case ActionsTypes.ADD_CARD:
-      return state;
+      return {
+        ...state,
+        cards: {
+          ...state.cards,
+          [action.payload.name]: action.payload,
+        },
+      };
 
     case ActionsTypes.ADD_TRANSACTION: {
       if (!state.activeCard) {
@@ -103,7 +99,7 @@ export const Home = (): JSX.Element => {
 
   const modalsMap = {
     [ModalTypes.TRANSACTION]: TransactionModal,
-    [ModalTypes.CARD]: TransactionModal,
+    [ModalTypes.CARD]: CardModal,
     [ModalTypes.DEFAULT]: () => null,
   };
 
@@ -116,11 +112,24 @@ export const Home = (): JSX.Element => {
     });
   }, []);
 
+  const handleLongPressCard = useCallback(nameCard => {
+    dispatch({ type: ActionsTypes.SET_ACTIVE_CARD, payload: nameCard });
+  }, []);
+
+  const handlePressEmptyCard = () => {
+    dispatch({ type: ActionsTypes.SHOW_MODAL, payload: ModalTypes.CARD });
+  };
+
   const renderCard = ({ item }: { item: CardProps }) => (
-    <Card
-      currentCard={item}
-      onOpenModalTransaction={handlerOpenModalTransaction}
-    />
+    <Pressable
+      onLongPress={() => handleLongPressCard(item.name)}
+      style={({ pressed }) => pressed && styles.hoverCard}>
+      <Card
+        state={state}
+        currentCard={item}
+        onOpenModalTransaction={handlerOpenModalTransaction}
+      />
+    </Pressable>
   );
 
   const renderTransaction = ({ item }: { item: TransactionProps }) => (
@@ -133,11 +142,11 @@ export const Home = (): JSX.Element => {
     }
     const firstCard = Object.keys(state.cards)[0];
     dispatch({ type: ActionsTypes.SET_ACTIVE_CARD, payload: firstCard });
-  }, []);
+  }, [state.cards]);
 
   return (
     <View style={commonStyles.root}>
-      {state.activeCard && (
+      {state.activeModal && (
         <CustomModal visible={true} dispatch={dispatch} state={state} />
       )}
 
@@ -146,27 +155,33 @@ export const Home = (): JSX.Element => {
           <Text style={styles.title}>Home</Text>
         </View>
         <View style={styles.cards}>
-          {state.activeCard ? (
-            <FlatList
-              horizontal
-              data={Object.values(state.cards)}
-              renderItem={renderCard}
-              keyExtractor={item => item.name?.toString() || 'default'}
-            />
-          ) : (
-            <EmptyCard dispatch={dispatch} />
-          )}
+          <FlatList
+            style={styles.flatList}
+            horizontal
+            data={Object.values(state.cards) || []}
+            renderItem={renderCard}
+            keyExtractor={item => item?.name || 'default'}
+            extraData={state.activeCard}
+            ListEmptyComponent={() => (
+              <Pressable
+                onPress={handlePressEmptyCard}
+                style={({ pressed }) => ({ opacity: pressed ? 1 : 0.75 })}>
+                <EmptyCard />
+              </Pressable>
+            )}
+          />
         </View>
-        {state.activeCard && (
-          <View style={styles.horizontalWrapper}>
-            <Text style={styles.subtitle}>Last transactions</Text>
-            <FlatList
-              data={state.cards[state.activeCard].transactions}
-              renderItem={renderTransaction}
-              keyExtractor={item => String(item.amount) + item.comment}
-            />
-          </View>
-        )}
+        {state.activeCard &&
+          state.cards[state.activeCard].transactions?.length && (
+            <View style={styles.horizontalWrapper}>
+              <Text style={styles.subtitle}>Last transactions</Text>
+              <FlatList
+                data={state.cards[state.activeCard]?.transactions}
+                renderItem={renderTransaction}
+                keyExtractor={item => String(item.amount) + item.comment}
+              />
+            </View>
+          )}
       </View>
     </View>
   );
@@ -175,25 +190,39 @@ export const Home = (): JSX.Element => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    width: '100%',
+    alignItems: 'center',
     marginTop: 20,
   },
   horizontalWrapper: {
+    width: '100%',
     paddingHorizontal: '5%',
   },
   title: {
-    marginBottom: 28,
+    width: '100%',
     color: colors.black,
     fontWeight: '700',
     fontSize: 30,
   },
   subtitle: {
-    marginBottom: 16,
+    width: '100%',
+    marginBottom: 4,
     color: colors.black,
     fontWeight: '600',
     fontSize: 18,
   },
   cards: {
+    width: '100%',
     alignItems: 'center',
-    height: '35%',
+    height: '33%',
+  },
+
+  flatList: {
+    padding: 20,
+  },
+
+  hoverCard: {
+    marginTop: 4,
+    opacity: 0.8,
   },
 });

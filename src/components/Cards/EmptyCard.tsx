@@ -2,35 +2,20 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { colors } from '../../constants/colors';
 import { AddSVG } from '../../assets/SVGs/AddSVG';
-import { IconButton } from '../Buttons/IconButton';
-import { ActionsTypes } from '../../constants/ActionsTypes';
-import { ModalTypes } from '../../constants/ModalTypes';
 
-interface Props {
-  dispatch: React.Dispatch<{ type: ActionsTypes; payload: ModalTypes }>;
-}
-
-export const EmptyCard = ({ dispatch }: Props) => {
-  const handlePress = () => {
-    dispatch({ type: ActionsTypes.SHOW_MODAL, payload: ModalTypes.CARD });
-  };
-
-  return (
-    <View style={styles.root}>
-      <IconButton onPress={handlePress}>
-        <AddSVG />
-      </IconButton>
-      <Text style={styles.title}>ADD NEW CARD</Text>
-    </View>
-  );
-};
+export const EmptyCard = () => (
+  <View style={styles.root}>
+    <AddSVG />
+    <Text style={styles.title}>ADD NEW CARD</Text>
+  </View>
+);
 
 const styles = StyleSheet.create({
   root: {
-    width: 330,
-    height: 200,
     justifyContent: 'center',
     alignItems: 'center',
+    width: 300,
+    height: 200,
     borderRadius: 20,
     borderWidth: 2,
     borderColor: colors.white,
@@ -45,6 +30,7 @@ const styles = StyleSheet.create({
     elevation: 30,
   },
   title: {
+    marginTop: 10,
     color: colors.white,
     fontWeight: '600',
     fontSize: 18,

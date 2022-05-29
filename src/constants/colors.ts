@@ -11,4 +11,6 @@ export const colors = {
 
   lightBlueGradient: '#3CA6D3',
   darkBlueGradient: '#644CC4',
+
+  orange: '#ffae06',
 };

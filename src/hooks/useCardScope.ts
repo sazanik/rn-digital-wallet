@@ -16,8 +16,6 @@ export const useCardScope = ({ dispatch }: Props) => {
   const handleChangeText = useCallback(
     (field: FieldsTypes, value: string | number) => {
       setFormData({
-        name: '',
-        balance: 0,
         ...formData,
         [field]: value,
       });
