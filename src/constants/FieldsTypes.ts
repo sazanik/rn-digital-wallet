@@ -1,1 +1,1 @@
-export type FieldsTypes = 'amount' | 'comment';
+export type FieldsTypes = 'name' | 'balance' | 'amount' | 'comment';

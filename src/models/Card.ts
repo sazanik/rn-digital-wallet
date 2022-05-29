@@ -1,6 +1,6 @@
 import { Transaction } from './Transaction';
 
-export interface Card {
+export interface Card extends Record<string, unknown> {
   name?: string;
   balance?: number;
   transactions?: Transaction[];

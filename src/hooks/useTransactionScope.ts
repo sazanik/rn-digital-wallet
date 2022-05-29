@@ -15,7 +15,7 @@ interface Props {
   state: State;
 }
 
-export const useTransaction = ({ state, dispatch }: Props) => {
+export const useTransactionScope = ({ state, dispatch }: Props) => {
   const [formData, setFormData] = useState<Transaction | null>(null);
   const [toggleActiveId, setToggleActiveId] = useState<ToggleIds>(0);
 
@@ -33,17 +33,20 @@ export const useTransaction = ({ state, dispatch }: Props) => {
   );
 
   const handlePressButton = () => {
+    if (!state.activeCard) {
+      return;
+    }
+    const currentBalance = Number(state?.cards[state.activeCard].balance);
     const newBalance = {
-      [TransactionsTypes.INCOME]:
-        Number(state.activeCard?.balance) + Number(formData?.amount),
-      [TransactionsTypes.EXPENSE]:
-        Number(state.activeCard?.balance) - Number(formData?.amount),
+      [TransactionsTypes.INCOME]: currentBalance + Number(formData?.amount),
+      [TransactionsTypes.EXPENSE]: currentBalance - Number(formData?.amount),
     };
 
     dispatch({
       type: ActionsTypes.UPDATE_BALANCE,
       payload: newBalance[transactionsOptions[toggleActiveId]],
     });
+
     dispatch({ type: ActionsTypes.ADD_TRANSACTION, payload: formData });
 
     setFormData(null);

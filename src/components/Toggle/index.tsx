@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { colors } from '../../constants/colors';
-import { ToggleIds } from '../../models/ToggleIds';
+import { ToggleIds } from '../../constants/ToggleIds';
 
 interface Props {
   options: Record<ToggleIds, string>;
