@@ -8,17 +8,30 @@ import { commonStyles } from '../../constants/commonStyles';
 import { IconButton } from '../Buttons/IconButton';
 import { Card as CardProps } from '../../models/Card';
 import { State } from '../../models/State';
+import { ActionsTypes } from '../../constants/ActionsTypes';
+import { ModalTypes } from '../../constants/ModalTypes';
 
 interface Props {
-  onOpenModalTransaction: () => void;
   currentCard: CardProps;
   state: State;
+  dispatch: React.Dispatch<{
+    type: ActionsTypes;
+    payload: ModalTypes | string;
+  }>;
 }
 
-export const Card = ({ currentCard, onOpenModalTransaction, state }: Props) => {
+export const Card = ({ currentCard, state, dispatch }: Props) => {
   const handlePress = () => {
-    if (onOpenModalTransaction) {
-      onOpenModalTransaction();
+    dispatch({
+      type: ActionsTypes.SHOW_MODAL,
+      payload: ModalTypes.TRANSACTION,
+    });
+
+    if (currentCard.name) {
+      dispatch({
+        type: ActionsTypes.SET_ACTIVE_CARD,
+        payload: currentCard?.name,
+      });
     }
   };
 

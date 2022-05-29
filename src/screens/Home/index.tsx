@@ -1,5 +1,12 @@
 import React, { useCallback, useEffect, useReducer } from 'react';
-import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
+import {
+  FlatList,
+  Pressable,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import { colors } from '../../constants/colors';
 import { commonStyles } from '../../constants/commonStyles';
 import { TransactionModal } from '../../components/Modals/TransactionModal';
@@ -11,7 +18,6 @@ import { EmptyCard } from '../../components/Cards/EmptyCard';
 import { ModalTypes } from '../../constants/ModalTypes';
 import { Card as CardProps } from '../../models/Card';
 import { Card } from '../../components/Cards';
-import { isEmptyObject } from '../../utils/IsEmptyObject';
 import { CardModal } from '../../components/Modals/CardModal';
 
 const initialState: State = {
@@ -105,13 +111,6 @@ export const Home = (): JSX.Element => {
 
   const CustomModal = modalsMap[state.activeModal || ModalTypes.DEFAULT];
 
-  const handlerOpenModalTransaction = useCallback(() => {
-    dispatch({
-      type: ActionsTypes.SHOW_MODAL,
-      payload: ModalTypes.TRANSACTION,
-    });
-  }, []);
-
   const handleLongPressCard = useCallback(nameCard => {
     dispatch({ type: ActionsTypes.SET_ACTIVE_CARD, payload: nameCard });
   }, []);
@@ -124,11 +123,7 @@ export const Home = (): JSX.Element => {
     <Pressable
       onLongPress={() => handleLongPressCard(item.name)}
       style={({ pressed }) => pressed && styles.hoverCard}>
-      <Card
-        state={state}
-        currentCard={item}
-        onOpenModalTransaction={handlerOpenModalTransaction}
-      />
+      <Card state={state} dispatch={dispatch} currentCard={item} />
     </Pressable>
   );
 
@@ -137,15 +132,18 @@ export const Home = (): JSX.Element => {
   );
 
   useEffect(() => {
-    if (isEmptyObject(state.cards)) {
-      return;
+    const namesCardsArray = Object.keys(state.cards);
+
+    if (namesCardsArray.length === 1) {
+      dispatch({
+        type: ActionsTypes.SET_ACTIVE_CARD,
+        payload: namesCardsArray[0],
+      });
     }
-    const firstCard = Object.keys(state.cards)[0];
-    dispatch({ type: ActionsTypes.SET_ACTIVE_CARD, payload: firstCard });
   }, [state.cards]);
 
   return (
-    <View style={commonStyles.root}>
+    <SafeAreaView style={commonStyles.root}>
       {state.activeModal && (
         <CustomModal visible={true} dispatch={dispatch} state={state} />
       )}
@@ -154,10 +152,14 @@ export const Home = (): JSX.Element => {
         <View style={styles.horizontalWrapper}>
           <Text style={styles.title}>Home</Text>
         </View>
-        <View style={styles.cards}>
+        <View style={styles.cardsWrapper}>
           <FlatList
-            style={styles.flatList}
+            contentContainerStyle={[
+              styles.cards,
+              Object.keys(state.cards).length < 2 && styles.fullWidth,
+            ]}
             horizontal
+            showsHorizontalScrollIndicator={false}
             data={Object.values(state.cards) || []}
             renderItem={renderCard}
             keyExtractor={item => item?.name || 'default'}
@@ -183,7 +185,7 @@ export const Home = (): JSX.Element => {
             </View>
           )}
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -191,11 +193,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: '100%',
-    alignItems: 'center',
+    // alignItems: 'center',
     marginTop: 20,
   },
   horizontalWrapper: {
-    width: '100%',
     paddingHorizontal: '5%',
   },
   title: {
@@ -211,14 +212,20 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontSize: 18,
   },
-  cards: {
+
+  cardsWrapper: {
     width: '100%',
+    height: '35%',
     alignItems: 'center',
-    height: '33%',
   },
 
-  flatList: {
-    padding: 20,
+  cards: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  fullWidth: {
+    width: '100%',
   },
 
   hoverCard: {

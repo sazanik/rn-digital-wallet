@@ -20,9 +20,9 @@ export const useTransactionScope = ({ state, dispatch }: Props) => {
   const [toggleActiveId, setToggleActiveId] = useState<ToggleIds>(0);
 
   const handleChangeText = useCallback(
-    (field: FieldsTypes, value: string) => {
+    (field: FieldsTypes, value: string | number) => {
       setFormData({
-        amount: '',
+        amount: 0,
         comment: '',
         ...formData,
         [field]: value,

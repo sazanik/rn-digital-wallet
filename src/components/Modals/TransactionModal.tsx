@@ -50,7 +50,7 @@ export const TransactionModal = ({ state, dispatch, visible }: Props) => {
       </View>
       <View style={styles.formRow}>
         <TextInput
-          value={formData?.amount}
+          value={formData?.amount.toString()}
           style={styles.input}
           keyboardType="numeric"
           maxLength={7}
