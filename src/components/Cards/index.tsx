@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { colors } from '../../constants/colors';
@@ -6,19 +6,19 @@ import { AddSVG } from '../../assets/SVGs/AddSVG';
 import { VisaSVG } from '../../assets/SVGs/VisaSVG';
 import { commonStyles } from '../../constants/commonStyles';
 import { IconButton } from '../Buttons/IconButton';
-import { Card as CardProps } from '../../types/Card';
+import { Card as CardProps } from '../../models/Card';
 
 interface Props {
-  onPressAdd: () => void;
-  activeCard: CardProps;
+  onOpenModalTransaction: () => void;
+  currentCard: CardProps;
 }
 
-export const Card = ({ activeCard, onPressAdd }: Props) => {
-  const handlePress = useCallback(() => {
-    if (onPressAdd) {
-      onPressAdd();
+export const Card = ({ currentCard, onOpenModalTransaction }: Props) => {
+  const handlePress = () => {
+    if (onOpenModalTransaction) {
+      onOpenModalTransaction();
     }
-  }, [onPressAdd]);
+  };
 
   return (
     <View style={styles.root}>
@@ -28,7 +28,7 @@ export const Card = ({ activeCard, onPressAdd }: Props) => {
         start={{ x: 0, y: 0.5 }}
         end={{ x: 1, y: 0.5 }}>
         <View style={styles.row}>
-          <Text style={[styles.text, styles.name]}>{activeCard.name}</Text>
+          <Text style={[styles.text, styles.name]}>{currentCard.name}</Text>
           <IconButton onPress={handlePress}>
             <AddSVG />
           </IconButton>
@@ -38,7 +38,7 @@ export const Card = ({ activeCard, onPressAdd }: Props) => {
             style={[
               styles.text,
               styles.balance,
-            ]}>{`$${activeCard.balance}`}</Text>
+            ]}>{`$${currentCard.balance}`}</Text>
         </View>
         <View style={styles.row}>
           <Text style={[styles.text, styles.number]}>12** **** **** 3456</Text>
@@ -54,7 +54,6 @@ export const Card = ({ activeCard, onPressAdd }: Props) => {
 
 const styles = StyleSheet.create({
   root: {
-    flex: 1,
     width: 330,
     height: 200,
     shadowColor: colors.black,
@@ -64,7 +63,7 @@ const styles = StyleSheet.create({
       width: 4,
       height: 3,
     },
-    elevation: 12,
+    elevation: 20,
   },
   card: {
     borderRadius: 20,

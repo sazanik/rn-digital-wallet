@@ -1,4 +1,4 @@
-import { TransactionsTypes } from './TransactionsTypes';
+import { TransactionsTypes } from '../constants/TransactionsTypes';
 
 export interface Transaction {
   type: TransactionsTypes;

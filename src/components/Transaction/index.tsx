@@ -4,7 +4,7 @@ import { commonStyles } from '../../constants/commonStyles';
 import { colors } from '../../constants/colors';
 import { UpSVG } from '../../assets/SVGs/UpSVG';
 import { DownSVG } from '../../assets/SVGs/DownSVG';
-import { Transaction as TransactionProps } from '../../types/Transaction';
+import { Transaction as TransactionProps } from '../../models/Transaction';
 import { marksTypes } from '../../constants/marksTypes';
 
 const icon = {

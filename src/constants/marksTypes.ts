@@ -1,4 +1,4 @@
-import { TransactionsTypes } from '../../types/TransactionsTypes';
+import { TransactionsTypes } from './TransactionsTypes';
 
 export const marksTypes: Record<TransactionsTypes, string> = {
   [TransactionsTypes.INCOME]: '+',

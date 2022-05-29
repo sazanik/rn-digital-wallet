@@ -1,4 +1,4 @@
-import { TransactionsTypes } from '../../types/TransactionsTypes';
+import { TransactionsTypes } from '../../constants/TransactionsTypes';
 
 export const transactionsOptions = {
   0: TransactionsTypes.INCOME,

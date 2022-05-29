@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal, StyleSheet, Text, TextInput, View } from 'react-native';
 import { IconButton } from '../Buttons/IconButton';
 import { CrossSVG } from '../../assets/SVGs/CrossSVG';
@@ -7,71 +7,41 @@ import { commonStyles } from '../../constants/commonStyles';
 import { colors } from '../../constants/colors';
 import { Toggle } from '../Toggle';
 import { transactionsOptions } from '../Toggle/options';
-import { ToggleIds } from '../../types/ToggleIds';
-import { Transaction } from '../../types/Transaction';
-import { Fields } from '../../types/Fields';
-import { ActionsTypes } from '../../types/ActionsTypes';
-import { State } from '../../types/State';
-import { TransactionsTypes } from '../../types/TransactionsTypes';
+import { Transaction } from '../../models/Transaction';
+import { ActionsTypes } from '../../constants/ActionsTypes';
+import { State } from '../../models/State';
 import { checkInvalidData } from '../../utils/checkInvalidData';
+import { useTransaction } from '../../hooks/useTransaction';
 
 interface Props {
-  dispatch: React.Dispatch<{ type: ActionsTypes; payload: any }>;
+  dispatch: React.Dispatch<{
+    type: ActionsTypes;
+    payload: Transaction | number | null;
+  }>;
   state: State;
   visible?: boolean;
-  onClose: () => void;
 }
 
-export const PrimaryModal = ({ onClose, visible, state, dispatch }: Props) => {
-  const [activeId, setActiveId] = useState<ToggleIds>(0);
-  const [formData, setFormData] = useState<Transaction | null>(null);
+export const TransactionModal = ({ visible, state, dispatch }: Props) => {
+  const {
+    handlePressButton,
+    handleToggle,
+    toggleActiveId,
+    handleChangeText,
+    formData,
+  } = useTransaction({ state, dispatch });
   const [isDisabled, setDisabled] = useState<boolean>(true);
 
-  const handleToggle = (id: ToggleIds) => {
-    setActiveId(id);
-  };
-
   const handleCloseModal = () => {
-    if (onClose) {
-      onClose();
-    }
-  };
-
-  const handleChangeText = useCallback(
-    (field: Fields, value: string) => {
-      setFormData({
-        amount: '',
-        comment: '',
-        ...formData,
-        [field]: value,
-        type: transactionsOptions[activeId],
-      });
-    },
-    [activeId, formData],
-  );
-
-  const handleOnPress = () => {
-    const newBalance = {
-      [TransactionsTypes.INCOME]:
-        Number(state.activeCard?.balance) + Number(formData?.amount),
-      [TransactionsTypes.EXPENSE]:
-        Number(state.activeCard?.balance) - Number(formData?.amount),
-    };
-
     dispatch({
-      type: ActionsTypes.UPDATE_BALANCE,
-      payload: newBalance[transactionsOptions[activeId]],
+      type: ActionsTypes.HIDE_MODAL,
+      payload: null,
     });
-    dispatch({ type: ActionsTypes.ADD_TRANSACTION, payload: formData });
-
-    setFormData(null);
   };
 
   useEffect(() => {
     setDisabled(checkInvalidData(formData));
   }, [formData]);
-
-  console.log(isDisabled);
 
   return (
     <Modal animationType="fade" transparent={true} visible={visible}>
@@ -88,7 +58,7 @@ export const PrimaryModal = ({ onClose, visible, state, dispatch }: Props) => {
               <Toggle
                 options={transactionsOptions}
                 onToggle={handleToggle}
-                activeId={activeId}
+                activeId={toggleActiveId}
               />
             </View>
           </View>
@@ -114,7 +84,7 @@ export const PrimaryModal = ({ onClose, visible, state, dispatch }: Props) => {
             <PrimaryButton
               disabled={isDisabled}
               title="Save"
-              onPress={handleOnPress}
+              onPress={handlePressButton}
             />
           </View>
         </View>

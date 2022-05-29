@@ -1,4 +1,4 @@
-import { Transaction } from '../types/Transaction';
+import { Transaction } from '../models/Transaction';
 
 export const checkInvalidData = (data: Transaction | null) => {
   const formattedDate = Object.values(data || {});
