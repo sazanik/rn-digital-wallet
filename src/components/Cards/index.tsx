@@ -101,6 +101,9 @@ const styles = StyleSheet.create({
     opacity: 0.7,
     overflow: Platform.OS === 'android' ? 'hidden' : 'visible',
   },
+  hover: {
+    marginTop: 4,
+  },
   active: {
     borderColor: colors.orange,
     opacity: 1,
@@ -140,9 +143,5 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     fontSize: 16,
     lineHeight: 24,
-  },
-  hover: {
-    marginTop: 4,
-    opacity: 0.8,
   },
 });
