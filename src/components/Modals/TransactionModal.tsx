@@ -1,26 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
 import { colors } from '../../constants/colors';
 import { Toggle } from '../Toggle';
 import { transactionsOptions } from '../Toggle/options';
-import { Transaction } from '../../models/Transaction';
-import { ActionsTypes } from '../../constants/ActionsTypes';
-import { State } from '../../models/State';
 import { checkInvalidData } from '../../utils/checkInvalidData';
 import { useTransactionScope } from '../../hooks/useTransactionScope';
 import { ModalLayout } from '../Layouts/ModalLayout';
 import { commonStyles } from '../../constants/commonStyles';
+import { AppContext } from '../../../App';
 
 interface Props {
-  dispatch: React.Dispatch<{
-    type: ActionsTypes;
-    payload: Transaction | number | null;
-  }>;
-  state: State;
   visible?: boolean;
 }
 
-export const TransactionModal = ({ state, dispatch, visible }: Props) => {
+export const TransactionModal = ({ visible }: Props) => {
+  const { dispatch, state } = useContext(AppContext);
   const [isDisabled, setDisabled] = useState<boolean>(true);
   const {
     handlePressButton,
@@ -50,7 +44,7 @@ export const TransactionModal = ({ state, dispatch, visible }: Props) => {
       </View>
       <View style={styles.formRow}>
         <TextInput
-          value={formData?.amount.toString()}
+          value={formData?.amount?.toString()}
           style={styles.input}
           keyboardType="numeric"
           maxLength={7}

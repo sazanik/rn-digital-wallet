@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { colors } from '../../constants/colors';
@@ -7,20 +7,17 @@ import { VisaSVG } from '../../assets/SVGs/VisaSVG';
 import { commonStyles } from '../../constants/commonStyles';
 import { IconButton } from '../Buttons/IconButton';
 import { Card as CardProps } from '../../models/Card';
-import { State } from '../../models/State';
 import { ActionsTypes } from '../../constants/ActionsTypes';
 import { ModalTypes } from '../../constants/ModalTypes';
+import { AppContext } from '../../../App';
 
 interface Props {
   currentCard: CardProps;
-  state: State;
-  dispatch: React.Dispatch<{
-    type: ActionsTypes;
-    payload: ModalTypes | string;
-  }>;
 }
 
-export const Card = ({ currentCard, state, dispatch }: Props) => {
+export const Card = ({ currentCard }: Props) => {
+  const { dispatch, state } = useContext(AppContext);
+
   const handlePress = () => {
     dispatch({
       type: ActionsTypes.SHOW_MODAL,

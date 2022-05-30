@@ -1,22 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
 import { colors } from '../../constants/colors';
-import { ActionsTypes } from '../../constants/ActionsTypes';
 import { checkInvalidData } from '../../utils/checkInvalidData';
 import { ModalLayout } from '../Layouts/ModalLayout';
 import { commonStyles } from '../../constants/commonStyles';
 import { useCardScope } from '../../hooks/useCardScope';
-import { Card } from '../../models/Card';
+import { AppContext } from '../../../App';
 
 interface Props {
-  dispatch: React.Dispatch<{
-    type: ActionsTypes;
-    payload: Card | null;
-  }>;
   visible?: boolean;
 }
 
-export const CardModal = ({ dispatch, visible }: Props) => {
+export const CardModal = ({ visible }: Props) => {
+  const { dispatch } = useContext(AppContext);
   const [isDisabled, setDisabled] = useState<boolean>(true);
 
   const { handlePressButton, handleChangeText, formData } = useCardScope({

@@ -22,7 +22,7 @@ export const useTransactionScope = ({ state, dispatch }: Props) => {
   const handleChangeText = useCallback(
     (field: FieldsTypes, value: string | number) => {
       setFormData({
-        amount: 0,
+        amount: null,
         comment: '',
         ...formData,
         [field]: value,

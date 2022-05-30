@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useReducer } from 'react';
+import React, { useCallback, useContext, useEffect } from 'react';
 import {
   FlatList,
   Pressable,
@@ -13,107 +13,30 @@ import { TransactionModal } from '../../components/Modals/TransactionModal';
 import { Transaction as TransactionProps } from '../../models/Transaction';
 import { Transaction } from '../../components/Transaction';
 import { ActionsTypes } from '../../constants/ActionsTypes';
-import { State } from '../../models/State';
 import { EmptyCard } from '../../components/Cards/EmptyCard';
 import { ModalTypes } from '../../constants/ModalTypes';
 import { Card as CardProps } from '../../models/Card';
 import { Card } from '../../components/Cards';
 import { CardModal } from '../../components/Modals/CardModal';
+import { AppContext } from '../../../App';
 
-const initialState: State = {
-  activeModal: null,
-  activeCard: null,
-  cards: {},
-};
-
-const reducer = (
-  state: State,
-  action: { type: ActionsTypes; payload: any },
-): State => {
-  switch (action.type) {
-    case ActionsTypes.SHOW_MODAL:
-      return {
-        ...state,
-        activeModal: action.payload as ModalTypes,
-      };
-
-    case ActionsTypes.HIDE_MODAL:
-      return {
-        ...state,
-        activeModal: null,
-      };
-
-    case ActionsTypes.ADD_CARD:
-      return {
-        ...state,
-        cards: {
-          ...state.cards,
-          [action.payload.name]: action.payload,
-        },
-      };
-
-    case ActionsTypes.ADD_TRANSACTION: {
-      if (!state.activeCard) {
-        return state;
-      }
-
-      return {
-        ...state,
-        cards: {
-          ...state.cards,
-          [state.activeCard]: {
-            ...state.cards[state.activeCard],
-            transactions: [
-              ...(state.cards[state.activeCard].transactions || []),
-              action.payload,
-            ],
-          },
-        },
-      };
-    }
-
-    case ActionsTypes.UPDATE_BALANCE: {
-      if (!state.activeCard) {
-        return state;
-      }
-
-      return {
-        ...state,
-        cards: {
-          ...state.cards,
-          [state.activeCard]: {
-            ...state.cards[state.activeCard],
-            balance: action.payload,
-          },
-        },
-      };
-    }
-
-    case ActionsTypes.SET_ACTIVE_CARD:
-      return {
-        ...state,
-        activeCard: action.payload,
-      };
-
-    default:
-      return state;
-  }
+const modalsMap = {
+  [ModalTypes.TRANSACTION]: TransactionModal,
+  [ModalTypes.CARD]: CardModal,
+  [ModalTypes.DEFAULT]: () => null,
 };
 
 export const Home = (): JSX.Element => {
-  const [state, dispatch] = useReducer(reducer, initialState);
-
-  const modalsMap = {
-    [ModalTypes.TRANSACTION]: TransactionModal,
-    [ModalTypes.CARD]: CardModal,
-    [ModalTypes.DEFAULT]: () => null,
-  };
+  const { state, dispatch } = useContext(AppContext);
 
   const CustomModal = modalsMap[state.activeModal || ModalTypes.DEFAULT];
 
-  const handleLongPressCard = useCallback(nameCard => {
-    dispatch({ type: ActionsTypes.SET_ACTIVE_CARD, payload: nameCard });
-  }, []);
+  const handleLongPressCard = useCallback(
+    nameCard => {
+      dispatch({ type: ActionsTypes.SET_ACTIVE_CARD, payload: nameCard });
+    },
+    [dispatch],
+  );
 
   const handlePressEmptyCard = () => {
     dispatch({ type: ActionsTypes.SHOW_MODAL, payload: ModalTypes.CARD });
@@ -123,12 +46,12 @@ export const Home = (): JSX.Element => {
     <Pressable
       onLongPress={() => handleLongPressCard(item.name)}
       style={({ pressed }) => pressed && styles.hoverCard}>
-      <Card state={state} dispatch={dispatch} currentCard={item} />
+      <Card currentCard={item} />
     </Pressable>
   );
 
   const renderTransaction = ({ item }: { item: TransactionProps }) => (
-    <Transaction type={item.type} amount={item.amount} comment={item.comment} />
+    <Transaction {...item} />
   );
 
   useEffect(() => {
@@ -140,13 +63,11 @@ export const Home = (): JSX.Element => {
         payload: namesCardsArray[0],
       });
     }
-  }, [state.cards]);
+  }, [dispatch, state.cards]);
 
   return (
     <SafeAreaView style={commonStyles.root}>
-      {state.activeModal && (
-        <CustomModal visible={true} dispatch={dispatch} state={state} />
-      )}
+      {state.activeModal && <CustomModal visible={true} />}
 
       <View style={styles.container}>
         <View style={styles.horizontalWrapper}>
@@ -193,7 +114,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: '100%',
-    // alignItems: 'center',
     marginTop: 20,
   },
   horizontalWrapper: {
@@ -212,22 +132,18 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontSize: 18,
   },
-
   cardsWrapper: {
     width: '100%',
     height: '35%',
     alignItems: 'center',
   },
-
   cards: {
     alignItems: 'center',
     justifyContent: 'center',
   },
-
   fullWidth: {
     width: '100%',
   },
-
   hoverCard: {
     marginTop: 4,
     opacity: 0.8,
