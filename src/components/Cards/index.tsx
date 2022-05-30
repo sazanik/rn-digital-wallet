@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { colors } from '../../constants/colors';
 import { AddSVG } from '../../assets/SVGs/AddSVG';
@@ -32,12 +32,25 @@ export const Card = ({ currentCard }: Props) => {
     }
   };
 
+  const handleLongPressCard = () => {
+    dispatch({
+      type: ActionsTypes.SET_ACTIVE_CARD,
+      payload: currentCard.name,
+    });
+  };
+
   const isActive = currentCard.name === state.activeCard;
 
   return (
-    <View style={styles.root}>
+    <Pressable
+      onLongPress={handleLongPressCard}
+      style={({ pressed }) => [
+        styles.root,
+        isActive && styles.active,
+        pressed && styles.hover,
+      ]}>
       <LinearGradient
-        style={[styles.card, isActive && styles.activeCard]}
+        style={[styles.card]}
         colors={[colors.darkBlueGradient, colors.lightBlueGradient]}
         start={{ x: 0, y: 0.5 }}
         end={{ x: 1, y: 0.5 }}>
@@ -62,7 +75,7 @@ export const Card = ({ currentCard }: Props) => {
           <VisaSVG />
         </View>
       </LinearGradient>
-    </View>
+    </Pressable>
   );
 };
 
@@ -73,20 +86,30 @@ const styles = StyleSheet.create({
     width: 300,
     height: 200,
     marginHorizontal: 10,
+    borderRadius: 20,
+    borderWidth: 3,
+    backgroundColor: colors.warmGrey,
+    borderColor: 'transparent',
     shadowColor: colors.black,
-    shadowOpacity: 1,
-    shadowRadius: 5,
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
     shadowOffset: {
-      width: 4,
-      height: 3,
+      width: 2,
+      height: 1,
     },
-    elevation: 20,
+    elevation: 5,
+    opacity: 0.7,
+    overflow: Platform.OS === 'android' ? 'hidden' : 'visible',
+  },
+  active: {
+    borderColor: colors.orange,
+    opacity: 1,
   },
   card: {
-    width: '95%',
-    height: '95%',
-    borderRadius: 20,
+    width: '100%',
+    height: '100%',
     padding: 15,
+    borderRadius: 17,
   },
   row: {
     ...commonStyles.row,
@@ -118,27 +141,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 24,
   },
-
-  chooseButton: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: 80,
-    height: 25,
-    borderWidth: 1,
-    borderColor: colors.white,
-    borderRadius: 8,
-  },
-
-  textChooseButton: {
-    fontWeight: '400',
-    fontSize: 16,
-    lineHeight: 24,
-  },
-
-  activeCard: {
-    width: '100%',
-    height: '100%',
-    borderWidth: 3,
-    borderColor: colors.orange,
+  hover: {
+    marginTop: 4,
+    opacity: 0.8,
   },
 });

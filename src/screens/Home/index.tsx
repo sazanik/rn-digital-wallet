@@ -1,12 +1,5 @@
-import React, { useCallback, useContext, useEffect } from 'react';
-import {
-  FlatList,
-  Pressable,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import React, { useContext, useEffect } from 'react';
+import { FlatList, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { colors } from '../../constants/colors';
 import { commonStyles } from '../../constants/commonStyles';
 import { TransactionModal } from '../../components/Modals/TransactionModal';
@@ -15,7 +8,6 @@ import { Transaction } from '../../components/Transaction';
 import { ActionsTypes } from '../../constants/ActionsTypes';
 import { EmptyCard } from '../../components/Cards/EmptyCard';
 import { ModalTypes } from '../../constants/ModalTypes';
-import { Card as CardProps } from '../../models/Card';
 import { Card } from '../../components/Cards';
 import { CardModal } from '../../components/Modals/CardModal';
 import { AppContext } from '../../../App';
@@ -31,25 +23,6 @@ export const Home = (): JSX.Element => {
   const { state, dispatch } = useContext(AppContext);
 
   const CustomModal = modalsMap[state.activeModal || ModalTypes.DEFAULT];
-
-  const handleLongPressCard = useCallback(
-    nameCard => {
-      dispatch({ type: ActionsTypes.SET_ACTIVE_CARD, payload: nameCard });
-    },
-    [dispatch],
-  );
-
-  const handlePressEmptyCard = () => {
-    dispatch({ type: ActionsTypes.SHOW_MODAL, payload: ModalTypes.CARD });
-  };
-
-  const renderCard = ({ item }: { item: CardProps }) => (
-    <Pressable
-      onLongPress={() => handleLongPressCard(item.name)}
-      style={({ pressed }) => pressed && styles.hoverCard}>
-      <Card currentCard={item} />
-    </Pressable>
-  );
 
   const renderTransaction = ({ item }: { item: TransactionProps }) => (
     <Transaction {...item} />
@@ -83,16 +56,10 @@ export const Home = (): JSX.Element => {
             horizontal
             showsHorizontalScrollIndicator={false}
             data={Object.values(state.cards) || []}
-            renderItem={renderCard}
+            renderItem={({ item }) => <Card currentCard={item} />}
             keyExtractor={item => item?.name || 'default'}
             extraData={state.activeCard}
-            ListEmptyComponent={() => (
-              <Pressable
-                onPress={handlePressEmptyCard}
-                style={({ pressed }) => ({ opacity: pressed ? 1 : 0.75 })}>
-                <EmptyCard />
-              </Pressable>
-            )}
+            ListEmptyComponent={EmptyCard}
           />
         </View>
         {state.activeCard && (
@@ -147,13 +114,11 @@ const styles = StyleSheet.create({
     height: '35%',
     alignItems: 'center',
   },
-
   emptyWrapper: {
     marginTop: '30%',
     alignItems: 'center',
     justifyContent: 'flex-end',
   },
-
   emptyText: {
     width: 230,
     marginTop: 30,
@@ -163,16 +128,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: colors.warmGrey,
   },
-
   cards: {
     alignItems: 'center',
     justifyContent: 'center',
   },
   fullWidth: {
     width: '100%',
-  },
-  hoverCard: {
-    marginTop: 4,
-    opacity: 0.8,
   },
 });

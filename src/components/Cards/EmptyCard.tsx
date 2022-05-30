@@ -1,14 +1,29 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useContext } from 'react';
+import { Pressable, StyleSheet, Text } from 'react-native';
 import { colors } from '../../constants/colors';
 import { AddSVG } from '../../assets/SVGs/AddSVG';
+import { AppContext } from '../../../App';
+import { ActionsTypes } from '../../constants/ActionsTypes';
+import { ModalTypes } from '../../constants/ModalTypes';
 
-export const EmptyCard = () => (
-  <View style={styles.root}>
-    <AddSVG />
-    <Text style={styles.title}>ADD NEW CARD</Text>
-  </View>
-);
+export const EmptyCard = () => {
+  const { dispatch } = useContext(AppContext);
+
+  const handlePress = () => {
+    dispatch({ type: ActionsTypes.SHOW_MODAL, payload: ModalTypes.CARD });
+  };
+
+  return (
+    <Pressable
+      onPress={handlePress}
+      style={({ pressed }) =>
+        pressed ? [styles.root, styles.hover] : styles.root
+      }>
+      <AddSVG />
+      <Text style={styles.title}>ADD NEW CARD</Text>
+    </Pressable>
+  );
+};
 
 const styles = StyleSheet.create({
   root: {
@@ -21,13 +36,14 @@ const styles = StyleSheet.create({
     borderColor: colors.white,
     backgroundColor: colors.warmGrey,
     shadowColor: colors.black,
-    shadowOpacity: 1,
-    shadowRadius: 8,
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
     shadowOffset: {
-      width: 4,
-      height: 3,
+      width: 2,
+      height: 1,
     },
-    elevation: 30,
+    elevation: 5,
+    opacity: 0.8,
   },
   title: {
     marginTop: 10,
@@ -35,5 +51,9 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontSize: 18,
     lineHeight: 26,
+  },
+
+  hover: {
+    opacity: 1,
   },
 });
