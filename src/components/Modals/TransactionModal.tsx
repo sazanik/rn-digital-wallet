@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React from 'react';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
 import { colors } from '../../constants/colors';
 import { Toggle } from '../Toggle';
@@ -7,30 +7,24 @@ import { checkInvalidData } from '../../utils/checkInvalidData';
 import { useTransactionScope } from '../../hooks/useTransactionScope';
 import { ModalLayout } from '../Layouts/ModalLayout';
 import { commonStyles } from '../../constants/commonStyles';
-import { AppContext } from '../../../App';
 
 interface Props {
   visible?: boolean;
 }
 
 export const TransactionModal = ({ visible }: Props) => {
-  const { dispatch, state } = useContext(AppContext);
-  const [isDisabled, setDisabled] = useState<boolean>(true);
   const {
     handlePressButton,
     handleToggle,
     toggleActiveId,
     handleChangeText,
     formData,
-  } = useTransactionScope({ state, dispatch });
+  } = useTransactionScope();
 
-  useEffect(() => {
-    setDisabled(checkInvalidData(formData));
-  }, [formData]);
+  const isDisabled = checkInvalidData(formData);
 
   return (
     <ModalLayout
-      dispatch={dispatch}
       visible={visible}
       disabled={isDisabled}
       onPressButton={handlePressButton}>

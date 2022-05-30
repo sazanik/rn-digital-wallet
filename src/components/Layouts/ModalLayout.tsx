@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from 'react';
+import React, { PropsWithChildren, useContext } from 'react';
 import { Modal, StyleSheet, View } from 'react-native';
 import { IconButton } from '../Buttons/IconButton';
 import { CrossSVG } from '../../assets/SVGs/CrossSVG';
@@ -6,24 +6,21 @@ import { PrimaryButton } from '../Buttons/PrimaryButton';
 import { commonStyles } from '../../constants/commonStyles';
 import { colors } from '../../constants/colors';
 import { ActionsTypes } from '../../constants/ActionsTypes';
+import { AppContext } from '../../../App';
 
 interface Props {
-  dispatch: React.Dispatch<{
-    type: ActionsTypes;
-    payload: null;
-  }>;
   visible?: boolean;
   disabled?: boolean;
   onPressButton: () => void;
 }
 
 export const ModalLayout = ({
-  dispatch,
   onPressButton,
   visible,
   disabled,
   children,
 }: PropsWithChildren<Props>) => {
+  const { dispatch } = useContext(AppContext);
   const handleCloseModal = () => {
     dispatch({
       type: ActionsTypes.HIDE_MODAL,

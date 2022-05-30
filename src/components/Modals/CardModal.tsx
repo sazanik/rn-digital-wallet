@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
 import { colors } from '../../constants/colors';
 import { checkInvalidData } from '../../utils/checkInvalidData';
@@ -13,19 +13,14 @@ interface Props {
 
 export const CardModal = ({ visible }: Props) => {
   const { dispatch } = useContext(AppContext);
-  const [isDisabled, setDisabled] = useState<boolean>(true);
-
   const { handlePressButton, handleChangeText, formData } = useCardScope({
     dispatch,
   });
 
-  useEffect(() => {
-    setDisabled(checkInvalidData(formData));
-  }, [formData]);
+  const isDisabled = checkInvalidData(formData);
 
   return (
     <ModalLayout
-      dispatch={dispatch}
       visible={visible}
       disabled={isDisabled}
       onPressButton={handlePressButton}>
