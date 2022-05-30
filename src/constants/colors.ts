@@ -1,8 +1,8 @@
 export const colors = {
   black: '#2E2D30',
   white: '#ffffff',
-  grey: '#bbbbbb',
-  lightGrey: '#c2c2c2',
+  coldGrey: '#C1CEDF',
+  warmGrey: '#c2c2c2',
 
   buttonText: '#FEF2E6',
 
@@ -13,4 +13,7 @@ export const colors = {
   darkBlueGradient: '#644CC4',
 
   orange: '#ffae06',
+
+  violet: '#6B75FF',
+  red: '#F86E66',
 };

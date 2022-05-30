@@ -25,7 +25,7 @@ export const PrimaryButton = ({ title, onPress, disabled }: Props) => {
         style={styles.button}
         colors={
           disabled
-            ? [colors.lightGrey, colors.lightGrey]
+            ? [colors.warmGrey, colors.warmGrey]
             : [colors.darkBlueGradient, colors.lightBlueGradient]
         }
         start={{ x: 0, y: 0.5 }}

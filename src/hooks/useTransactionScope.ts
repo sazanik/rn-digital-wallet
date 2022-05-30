@@ -40,13 +40,14 @@ export const useTransactionScope = () => {
       [TransactionsTypes.EXPENSE]: currentBalance - Number(formData?.amount),
     };
 
+    const fullData = { ...formData, type: transactionsOptions[toggleActiveId] };
+
+    dispatch({ type: ActionsTypes.ADD_TRANSACTION, payload: fullData });
+
     dispatch({
       type: ActionsTypes.UPDATE_BALANCE,
       payload: newBalance[transactionsOptions[toggleActiveId]],
     });
-
-    dispatch({ type: ActionsTypes.ADD_TRANSACTION, payload: formData });
-
     setFormData(null);
   }, [dispatch, formData, state.activeCard, state?.cards, toggleActiveId]);
 

@@ -20,13 +20,17 @@ export const Toggle = ({ options, onToggle, activeId = 0 }: Props) => {
   );
 
   return (
-    <View style={styles.root}>
+    <View
+      style={[
+        styles.root,
+        { backgroundColor: activeId ? colors.red : colors.violet },
+      ]}>
       <TouchableOpacity
         activeOpacity={1}
         onPress={() => updateToggleData(0)}
         style={[
           styles.option,
-          { backgroundColor: activeId ? colors.grey : colors.white },
+          { backgroundColor: activeId ? colors.red : colors.white },
         ]}>
         <Text style={{ color: activeId ? colors.white : colors.black }}>
           {options['0']}
@@ -38,7 +42,7 @@ export const Toggle = ({ options, onToggle, activeId = 0 }: Props) => {
         onPress={() => updateToggleData(1)}
         style={[
           styles.option,
-          { backgroundColor: !activeId ? colors.grey : colors.white },
+          { backgroundColor: !activeId ? colors.violet : colors.white },
         ]}>
         <Text style={{ color: !activeId ? colors.white : colors.black }}>
           {options['1']}
@@ -56,7 +60,6 @@ const styles = StyleSheet.create({
     width: 200,
     padding: 4,
     borderRadius: 25,
-    backgroundColor: colors.grey,
   },
   option: {
     flex: 1,

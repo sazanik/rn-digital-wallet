@@ -19,6 +19,7 @@ import { Card as CardProps } from '../../models/Card';
 import { Card } from '../../components/Cards';
 import { CardModal } from '../../components/Modals/CardModal';
 import { AppContext } from '../../../App';
+import { NoTransactionsSVG } from '../../assets/SVGs/NoTransactionsSVG';
 
 const modalsMap = {
   [ModalTypes.TRANSACTION]: TransactionModal,
@@ -94,17 +95,26 @@ export const Home = (): JSX.Element => {
             )}
           />
         </View>
-        {state.activeCard &&
-          state.cards[state.activeCard].transactions?.length && (
-            <View style={styles.horizontalWrapper}>
+        {state.activeCard && (
+          <View style={styles.horizontalWrapper}>
+            {state.cards[state.activeCard].transactions?.length && (
               <Text style={styles.subtitle}>Last transactions</Text>
-              <FlatList
-                data={state.cards[state.activeCard]?.transactions}
-                renderItem={renderTransaction}
-                keyExtractor={item => String(item.amount) + item.comment}
-              />
-            </View>
-          )}
+            )}
+            <FlatList
+              data={state.cards[state.activeCard]?.transactions}
+              renderItem={renderTransaction}
+              keyExtractor={item => String(item.amount) + item.comment}
+              ListEmptyComponent={() => (
+                <View style={styles.emptyWrapper}>
+                  <NoTransactionsSVG />
+                  <Text style={styles.emptyText}>
+                    No transaction in your history yet
+                  </Text>
+                </View>
+              )}
+            />
+          </View>
+        )}
       </View>
     </SafeAreaView>
   );
@@ -137,6 +147,23 @@ const styles = StyleSheet.create({
     height: '35%',
     alignItems: 'center',
   },
+
+  emptyWrapper: {
+    marginTop: '30%',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+  },
+
+  emptyText: {
+    width: 230,
+    marginTop: 30,
+    fontSize: 16,
+    lineHeight: 22,
+    fontWeight: '500',
+    textAlign: 'center',
+    color: colors.warmGrey,
+  },
+
   cards: {
     alignItems: 'center',
     justifyContent: 'center',

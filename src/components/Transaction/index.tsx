@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 16,
     fontWeight: '400',
-    color: colors.grey,
+    color: colors.warmGrey,
   },
   amount: {
     textAlign: 'right',
