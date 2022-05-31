@@ -1,34 +1,17 @@
 import React, { useContext, useEffect } from 'react';
-import {
-  FlatList,
-  SafeAreaView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { colors } from '../../constants/colors';
-import { TransactionModal } from '../../components/Modals/TransactionModal';
 import { Transaction as TransactionProps } from '../../models/Transaction';
 import { Transaction } from '../../components/Transaction';
 import { ActionsTypes } from '../../constants/ActionsTypes';
 import { EmptyCard } from '../../components/Cards/EmptyCard';
-import { ModalTypes } from '../../constants/ModalTypes';
 import { Card } from '../../components/Cards';
-import { CardModal } from '../../components/Modals/CardModal';
 import { AppContext } from '../../../App';
 import { NoTransactionsSVG } from '../../assets/SVGs/NoTransactionsSVG';
-
-const modalsMap = {
-  [ModalTypes.TRANSACTION]: TransactionModal,
-  [ModalTypes.CARD]: CardModal,
-  [ModalTypes.DEFAULT]: () => null,
-};
+import { ScreenLayout } from '../../components/Layouts/ScreenLayout';
 
 export const Home = (): JSX.Element => {
   const { state, dispatch } = useContext(AppContext);
-
-  const CustomModal = modalsMap[state.activeModal || ModalTypes.DEFAULT];
 
   const renderTransaction = ({ item }: { item: TransactionProps }) => (
     <Transaction {...item} />
@@ -46,13 +29,7 @@ export const Home = (): JSX.Element => {
   }, [dispatch, state.cards]);
 
   return (
-    <SafeAreaView style={styles.root}>
-      <StatusBar backgroundColor={colors.white} barStyle="dark-content" />
-      {state.activeModal && <CustomModal visible={true} />}
-
-      <View style={styles.horizontalWrapper}>
-        <Text style={styles.title}>Home</Text>
-      </View>
+    <ScreenLayout title="Home">
       <View style={styles.cardsWrapper}>
         <FlatList
           contentContainerStyle={[
@@ -87,25 +64,14 @@ export const Home = (): JSX.Element => {
           />
         </View>
       )}
-    </SafeAreaView>
+    </ScreenLayout>
   );
 };
 
 const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-  },
   horizontalWrapper: {
     paddingHorizontal: '5%',
   },
-  title: {
-    width: '100%',
-    marginTop: '5%',
-    color: colors.black,
-    fontWeight: '700',
-    fontSize: 30,
-  },
-
   cardsWrapper: {
     alignItems: 'center',
     width: '100%',

@@ -1,6 +1,6 @@
 import React from 'react';
-import { Text } from 'react-native';
+import { ScreenLayout } from '../../components/Layouts/ScreenLayout';
 
 export const MyCards = () => {
-  return <Text>Settings</Text>;
+  return <ScreenLayout title="MyCards" />;
 };
