@@ -4,6 +4,8 @@ import { RootRouter } from './src/screens/RootRouter';
 import { State } from './src/models/State';
 import { ActionsTypes } from './src/constants/ActionsTypes';
 import { ModalTypes } from './src/constants/ModalTypes';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { StyleSheet } from 'react-native';
 
 const initialState: State = {
   activeModal: null,
@@ -98,10 +100,18 @@ export const AppContext = createContext<ContextProps>({
 const App = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   return (
-    <AppContext.Provider value={{ state, dispatch }}>
-      <RootRouter />
-    </AppContext.Provider>
+    <GestureHandlerRootView style={styles.root}>
+      <AppContext.Provider value={{ state, dispatch }}>
+        <RootRouter />
+      </AppContext.Provider>
+    </GestureHandlerRootView>
   );
 };
+
+const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+  },
+});
 
 export default App;
