@@ -13,9 +13,10 @@ import { AppContext } from '../../../App';
 
 interface Props {
   currentCard: CardProps;
+  advanced?: boolean;
 }
 
-export const Card = ({ currentCard }: Props) => {
+export const Card = ({ currentCard, advanced }: Props) => {
   const { dispatch, state } = useContext(AppContext);
 
   const handlePress = () => {
@@ -46,8 +47,9 @@ export const Card = ({ currentCard }: Props) => {
       onLongPress={handleLongPressCard}
       style={({ pressed }) => [
         styles.root,
-        isActive && styles.active,
-        pressed && styles.hover,
+        { opacity: advanced ? 0.7 : 1 },
+        advanced && isActive && styles.active,
+        advanced && pressed && styles.hover,
       ]}>
       <LinearGradient
         style={[styles.card]}
@@ -56,9 +58,11 @@ export const Card = ({ currentCard }: Props) => {
         end={{ x: 1, y: 0.5 }}>
         <View style={styles.row}>
           <Text style={[styles.text, styles.name]}>{currentCard.name}</Text>
-          <IconButton onPress={handlePress}>
-            <AddSVG />
-          </IconButton>
+          {advanced && (
+            <IconButton onPress={handlePress}>
+              <AddSVG fill={colors.white} />
+            </IconButton>
+          )}
         </View>
         <View style={styles.row}>
           <Text
@@ -98,7 +102,6 @@ const styles = StyleSheet.create({
       height: 1,
     },
     elevation: 5,
-    opacity: 0.7,
     overflow: Platform.OS === 'android' ? 'hidden' : 'visible',
   },
   hover: {

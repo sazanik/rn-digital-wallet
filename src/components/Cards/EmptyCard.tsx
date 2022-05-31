@@ -19,7 +19,7 @@ export const EmptyCard = () => {
       style={({ pressed }) =>
         pressed ? [styles.root, styles.hover] : styles.root
       }>
-      <AddSVG />
+      <AddSVG fill={colors.white} />
       <Text style={styles.title}>ADD NEW CARD</Text>
     </Pressable>
   );

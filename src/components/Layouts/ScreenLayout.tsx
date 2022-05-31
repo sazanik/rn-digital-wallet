@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useContext } from 'react';
+import React, { PropsWithChildren, ReactNode, useContext } from 'react';
 import { ModalTypes } from '../../constants/ModalTypes';
 import { TransactionModal } from '../Modals/TransactionModal';
 import { CardModal } from '../Modals/CardModal';
@@ -9,6 +9,7 @@ import { AppContext } from '../../../App';
 
 interface Props {
   title: string;
+  rightHeaderComponent?: ReactNode;
 }
 
 const modalsMap = {
@@ -17,17 +18,22 @@ const modalsMap = {
   [ModalTypes.DEFAULT]: () => null,
 };
 
-export const ScreenLayout = ({ title, children }: PropsWithChildren<Props>) => {
+export const ScreenLayout = ({
+  title,
+  children,
+  rightHeaderComponent,
+}: PropsWithChildren<Props>) => {
   const { state } = useContext(AppContext);
 
   const CustomModal = modalsMap[state.activeModal || ModalTypes.DEFAULT];
 
   return (
-    <SafeAreaView style={styles.root}>
+    <SafeAreaView>
       <StatusBar backgroundColor={colors.white} barStyle="dark-content" />
       {state.activeModal && <CustomModal visible={true} />}
       <View style={styles.horizontalWrapper}>
         <Text style={styles.title}>{title}</Text>
+        {rightHeaderComponent}
       </View>
       {children}
     </SafeAreaView>
@@ -35,15 +41,19 @@ export const ScreenLayout = ({ title, children }: PropsWithChildren<Props>) => {
 };
 
 const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-  },
   horizontalWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
     paddingHorizontal: '5%',
+    paddingBottom: 10,
+    borderBottomWidth: 2,
+    borderColor: colors.lightGrey,
   },
   title: {
-    width: '100%',
+    textAlign: 'left',
     marginTop: '5%',
+    marginBottom: 5,
     color: colors.black,
     fontWeight: '700',
     fontSize: 30,

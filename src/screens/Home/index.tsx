@@ -38,7 +38,7 @@ export const Home = (): JSX.Element => {
           ]}
           horizontal
           data={Object.values(state.cards) || []}
-          renderItem={({ item }) => <Card currentCard={item} />}
+          renderItem={({ item }) => <Card advanced currentCard={item} />}
           keyExtractor={item => item?.name || 'default'}
           extraData={state.activeCard}
           ListEmptyComponent={EmptyCard}
