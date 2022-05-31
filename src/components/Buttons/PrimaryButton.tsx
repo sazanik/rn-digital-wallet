@@ -20,9 +20,11 @@ export const PrimaryButton = ({ title, onPress, disabled }: Props) => {
     <Pressable
       disabled={disabled}
       onPress={handlePress}
-      style={({ pressed }) => pressed && { opacity: 0.8 }}>
+      style={({ pressed }) =>
+        pressed ? [styles.pressable, { opacity: 0.8 }] : styles.pressable
+      }>
       <LinearGradient
-        style={styles.button}
+        style={styles.innerPressable}
         colors={
           disabled
             ? [colors.warmGrey, colors.warmGrey]
@@ -37,10 +39,15 @@ export const PrimaryButton = ({ title, onPress, disabled }: Props) => {
 };
 
 const styles = StyleSheet.create({
-  button: {
+  pressable: {
+    width: '100%',
+    height: 50,
+  },
+
+  innerPressable: {
     justifyContent: 'center',
     alignItems: 'center',
-    width: 300,
+    width: '100%',
     height: '100%',
     borderRadius: 35,
   },

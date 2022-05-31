@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, TextInput, View } from 'react-native';
+import { StyleSheet, TextInput, View } from 'react-native';
 import { colors } from '../../constants/colors';
 import { Toggle } from '../Toggle';
 import { transactionsOptions } from '../Toggle/options';
@@ -27,8 +27,8 @@ export const TransactionModal = ({ visible }: Props) => {
     <ModalLayout
       visible={visible}
       disabled={isDisabled}
+      title="Add new transaction"
       onPressButton={handlePressButton}>
-      <Text style={styles.modalTitle}>Add new transaction</Text>
       <View style={styles.toggleRow}>
         <Toggle
           options={transactionsOptions}
@@ -60,16 +60,16 @@ export const TransactionModal = ({ visible }: Props) => {
 
 const styles = StyleSheet.create({
   formRow: {
-    width: '100%',
-    height: 120,
+    flex: 1,
+    justifyContent: 'center',
   },
   input: {
     width: '100%',
-    height: 40,
+    height: 50,
     marginBottom: 10,
     borderBottomWidth: 2,
     borderBottomColor: colors.transparentGrey,
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: '500',
   },
   modalTitle: {
@@ -83,5 +83,7 @@ const styles = StyleSheet.create({
   toggleRow: {
     ...commonStyles.row,
     justifyContent: 'center',
+    marginTop: -20,
+    marginBottom: 30,
   },
 });

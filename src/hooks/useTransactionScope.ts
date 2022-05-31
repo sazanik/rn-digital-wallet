@@ -14,9 +14,6 @@ export const useTransactionScope = () => {
     'comment' | 'amount'
   > | null>(null);
   const [toggleActiveId, setToggleActiveId] = useState<ToggleIds>(0);
-  console.log(toggleActiveId);
-
-  console.log(formData);
 
   const handleChangeText = useCallback(
     (field: FieldsTypes, value: string | number) => {

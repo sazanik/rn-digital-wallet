@@ -8,7 +8,6 @@ import {
   View,
 } from 'react-native';
 import { colors } from '../../constants/colors';
-import { commonStyles } from '../../constants/commonStyles';
 import { TransactionModal } from '../../components/Modals/TransactionModal';
 import { Transaction as TransactionProps } from '../../models/Transaction';
 import { Transaction } from '../../components/Transaction';
@@ -47,80 +46,79 @@ export const Home = (): JSX.Element => {
   }, [dispatch, state.cards]);
 
   return (
-    <SafeAreaView style={commonStyles.root}>
+    <SafeAreaView style={styles.root}>
       <StatusBar backgroundColor={colors.white} barStyle="dark-content" />
       {state.activeModal && <CustomModal visible={true} />}
 
-      <View style={styles.container}>
+      <View style={styles.horizontalWrapper}>
+        <Text style={styles.title}>Home</Text>
+      </View>
+      <View style={styles.cardsWrapper}>
+        <FlatList
+          contentContainerStyle={[
+            styles.cards,
+            Object.keys(state.cards).length < 2 && styles.fullWidth,
+          ]}
+          horizontal
+          data={Object.values(state.cards) || []}
+          renderItem={({ item }) => <Card currentCard={item} />}
+          keyExtractor={item => item?.name || 'default'}
+          extraData={state.activeCard}
+          ListEmptyComponent={EmptyCard}
+        />
+      </View>
+      {state.activeCard && (
         <View style={styles.horizontalWrapper}>
-          <Text style={styles.title}>Home</Text>
-        </View>
-        <View style={styles.cardsWrapper}>
+          {state.cards[state.activeCard].transactions?.length && (
+            <Text style={styles.transactionSubtitle}>Last transactions</Text>
+          )}
           <FlatList
-            contentContainerStyle={[
-              styles.cards,
-              Object.keys(state.cards).length < 2 && styles.fullWidth,
-            ]}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            data={Object.values(state.cards) || []}
-            renderItem={({ item }) => <Card currentCard={item} />}
-            keyExtractor={item => item?.name || 'default'}
-            extraData={state.activeCard}
-            ListEmptyComponent={EmptyCard}
+            data={state.cards[state.activeCard]?.transactions}
+            renderItem={renderTransaction}
+            keyExtractor={item => String(item.amount) + item.comment}
+            ListEmptyComponent={() => (
+              <View style={styles.emptyWrapper}>
+                <NoTransactionsSVG />
+                <Text style={styles.emptyText}>
+                  No transaction in your history yet
+                </Text>
+              </View>
+            )}
           />
         </View>
-        {state.activeCard && (
-          <View style={styles.horizontalWrapper}>
-            {state.cards[state.activeCard].transactions?.length && (
-              <Text style={styles.subtitle}>Last transactions</Text>
-            )}
-            <FlatList
-              data={state.cards[state.activeCard]?.transactions}
-              renderItem={renderTransaction}
-              keyExtractor={item => String(item.amount) + item.comment}
-              ListEmptyComponent={() => (
-                <View style={styles.emptyWrapper}>
-                  <NoTransactionsSVG />
-                  <Text style={styles.emptyText}>
-                    No transaction in your history yet
-                  </Text>
-                </View>
-              )}
-            />
-          </View>
-        )}
-      </View>
+      )}
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  root: {
     flex: 1,
-    width: '100%',
-    marginTop: 20,
   },
   horizontalWrapper: {
     paddingHorizontal: '5%',
   },
   title: {
     width: '100%',
+    marginTop: '5%',
     color: colors.black,
     fontWeight: '700',
     fontSize: 30,
   },
-  subtitle: {
+
+  cardsWrapper: {
+    alignItems: 'center',
     width: '100%',
-    marginBottom: 4,
+    height: '35%',
+    minHeight: 260,
+    marginBottom: 20,
+  },
+  transactionSubtitle: {
+    width: '100%',
+    marginBottom: 15,
     color: colors.black,
     fontWeight: '600',
     fontSize: 18,
-  },
-  cardsWrapper: {
-    width: '100%',
-    height: '35%',
-    alignItems: 'center',
   },
   emptyWrapper: {
     marginTop: '30%',

@@ -1,9 +1,8 @@
 import React, { useContext } from 'react';
-import { StyleSheet, Text, TextInput, View } from 'react-native';
+import { StyleSheet, TextInput, View } from 'react-native';
 import { colors } from '../../constants/colors';
 import { checkInvalidData } from '../../utils/checkInvalidData';
 import { ModalLayout } from '../Layouts/ModalLayout';
-import { commonStyles } from '../../constants/commonStyles';
 import { useCardScope } from '../../hooks/useCardScope';
 import { AppContext } from '../../../App';
 
@@ -23,9 +22,8 @@ export const CardModal = ({ visible }: Props) => {
     <ModalLayout
       visible={visible}
       disabled={isDisabled}
+      title="Add new card"
       onPressButton={handlePressButton}>
-      <Text style={styles.modalTitle}>Add new card</Text>
-      <View style={styles.toggleRow} />
       <View style={styles.formRow}>
         <TextInput
           value={formData?.name}
@@ -50,28 +48,16 @@ export const CardModal = ({ visible }: Props) => {
 
 const styles = StyleSheet.create({
   formRow: {
-    width: '100%',
-    height: 120,
+    flex: 1,
+    justifyContent: 'center',
   },
   input: {
     width: '100%',
-    height: 40,
-    marginBottom: 10,
+    height: 50,
+    marginBottom: 20,
     borderBottomWidth: 2,
     borderBottomColor: colors.transparentGrey,
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: '500',
-  },
-  modalTitle: {
-    marginBottom: 8,
-    textAlign: 'center',
-    fontSize: 18,
-    lineHeight: 26,
-    color: colors.black,
-    fontWeight: '600',
-  },
-  toggleRow: {
-    ...commonStyles.row,
-    justifyContent: 'center',
   },
 });

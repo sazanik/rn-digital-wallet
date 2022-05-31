@@ -7,6 +7,7 @@ export const commonStyles = {
   row: {
     flexDirection: 'row',
     alignItems: 'center',
+    width: '100%',
   },
   iconWrapper: {
     justifyContent: 'center',
