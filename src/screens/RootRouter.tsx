@@ -8,10 +8,23 @@ import { StyleSheet } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { HomeSVG } from '../assets/SVGs/HomeSVG';
 import { CardSVG } from '../assets/SVGs/CardSVG';
+import { AnimatedWrapper } from '../components/AnimatedWrapper';
 
 const Tab = createBottomTabNavigator();
 
-export const Root = () => {
+const AnimatedHome = () => (
+  <AnimatedWrapper>
+    <Home />
+  </AnimatedWrapper>
+);
+
+const AnimatedMyCards = () => (
+  <AnimatedWrapper>
+    <MyCards />
+  </AnimatedWrapper>
+);
+
+export const RootRouter = () => {
   return (
     <NavigationContainer>
       <Tab.Navigator
@@ -32,6 +45,7 @@ export const Root = () => {
           headerStyle: {
             backgroundColor: 'red',
           },
+          tabBarHideOnKeyboard: true,
           tabBarBackground: () => (
             <LinearGradient
               colors={[colors.darkBlueGradient, colors.lightBlueGradient]}
@@ -47,14 +61,14 @@ export const Root = () => {
         })}>
         <Tab.Screen
           name="Home"
-          component={Home}
+          component={AnimatedHome}
           options={{
             title: 'Home',
           }}
         />
         <Tab.Screen
           name="MyCards"
-          component={MyCards}
+          component={AnimatedMyCards}
           options={{
             title: 'My Cards',
           }}

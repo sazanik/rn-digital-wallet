@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { createContext, Dispatch, useReducer } from 'react';
-import { Root } from './src/screens';
+import { RootRouter } from './src/screens/RootRouter';
 import { State } from './src/models/State';
 import { ActionsTypes } from './src/constants/ActionsTypes';
 import { ModalTypes } from './src/constants/ModalTypes';
@@ -99,7 +99,7 @@ const App = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   return (
     <AppContext.Provider value={{ state, dispatch }}>
-      <Root />
+      <RootRouter />
     </AppContext.Provider>
   );
 };
