@@ -4,9 +4,10 @@ import { Home } from './Home';
 import { MyCards } from './MyCards';
 import { colors } from '../constants/colors';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { StyleSheet, View } from 'react-native';
-import { AddSVG } from '../assets/SVGs/AddSVG';
+import { StyleSheet } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import { HomeSVG } from '../assets/SVGs/HomeSVG';
+import { CardSVG } from '../assets/SVGs/CardSVG';
 
 const Tab = createBottomTabNavigator();
 
@@ -16,22 +17,20 @@ export const Root = () => {
       <Tab.Navigator
         sceneContainerStyle={{ backgroundColor: colors.white }}
         screenOptions={({ route }) => ({
-          tabBarIcon: ({ focused, color, size }) => {
-            let iconName;
+          tabBarIcon: ({ focused }) => {
+            switch (true) {
+              case route.name === 'Home':
+                return <HomeSVG opacity={focused ? 1 : 0.3} />;
 
-            if (route.name === 'Home') {
-              iconName = focused
-                ? 'ios-information-circle'
-                : 'ios-information-circle-outline';
-            } else if (route.name === 'MyCards') {
-              iconName = focused ? 'ios-list-box' : 'ios-list';
+              case route.name === 'MyCards':
+                return <CardSVG opacity={focused ? 1 : 0.3} />;
+
+              default:
+                return <HomeSVG opacity={focused ? 1 : 0.3} />;
             }
-
-            return (
-              <View>
-                <AddSVG />
-              </View>
-            );
+          },
+          headerStyle: {
+            backgroundColor: 'red',
           },
           tabBarBackground: () => (
             <LinearGradient
@@ -41,6 +40,8 @@ export const Root = () => {
               style={styles.tapBar}
             />
           ),
+          tabBarShowLabel: false,
+          headerShown: false,
           tabBarActiveTintColor: 'tomato',
           tabBarInactiveTintColor: 'gray',
         })}>

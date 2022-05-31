@@ -1,5 +1,12 @@
 import React, { useContext, useEffect } from 'react';
-import { FlatList, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import {
+  FlatList,
+  SafeAreaView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import { colors } from '../../constants/colors';
 import { commonStyles } from '../../constants/commonStyles';
 import { TransactionModal } from '../../components/Modals/TransactionModal';
@@ -41,6 +48,7 @@ export const Home = (): JSX.Element => {
 
   return (
     <SafeAreaView style={commonStyles.root}>
+      <StatusBar backgroundColor={colors.white} barStyle="dark-content" />
       {state.activeModal && <CustomModal visible={true} />}
 
       <View style={styles.container}>
@@ -120,7 +128,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   emptyText: {
-    width: 230,
+    width: 250,
     marginTop: 30,
     fontSize: 16,
     lineHeight: 22,
