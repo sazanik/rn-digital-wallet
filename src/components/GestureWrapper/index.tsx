@@ -35,8 +35,10 @@ export const GestureWrapper = ({
   const { rStyle } = useFollowAnimatedPosition({ x: translateX });
 
   return (
-    <GestureDetector gesture={gesture}>
-      <Animated.View style={rStyle}>{children}</Animated.View>
-    </GestureDetector>
+    <>
+      <GestureDetector gesture={gesture}>
+        <Animated.View style={rStyle}>{children}</Animated.View>
+      </GestureDetector>
+    </>
   );
 };

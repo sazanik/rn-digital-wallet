@@ -39,6 +39,17 @@ const reducer = (
         },
       };
 
+    case ActionsTypes.DELETE_CARD:
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { [action.payload]: deletedCard, ...otherCards } = state.cards;
+
+      return {
+        ...state,
+        cards: {
+          ...otherCards,
+        },
+      };
+
     case ActionsTypes.ADD_TRANSACTION: {
       if (!state.activeCard) {
         return state;

@@ -25,6 +25,11 @@ export const Home = (): JSX.Element => {
         type: ActionsTypes.SET_ACTIVE_CARD,
         payload: namesCardsArray[0],
       });
+    } else if (!namesCardsArray.length) {
+      dispatch({
+        type: ActionsTypes.SET_ACTIVE_CARD,
+        payload: null,
+      });
     }
   }, [dispatch, state.cards]);
 
@@ -46,7 +51,7 @@ export const Home = (): JSX.Element => {
       </View>
       {state.activeCard && (
         <View style={styles.horizontalWrapper}>
-          {state.cards[state.activeCard].transactions?.length && (
+          {state.cards[state.activeCard]?.transactions?.length && (
             <Text style={styles.transactionSubtitle}>Last transactions</Text>
           )}
           <FlatList

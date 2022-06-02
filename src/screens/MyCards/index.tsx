@@ -9,6 +9,7 @@ import { ActionsTypes } from '../../constants/ActionsTypes';
 import { ModalTypes } from '../../constants/ModalTypes';
 import { colors } from '../../constants/colors';
 import { GestureWrapper } from '../../components/GestureWrapper';
+import { CardBackground } from '../../components/Cards/CardBackground';
 
 export const MyCards = () => {
   const { state, dispatch } = useContext(AppContext);
@@ -29,11 +30,14 @@ export const MyCards = () => {
         contentContainerStyle={styles.cards}
         data={Object.values(state.cards) || []}
         renderItem={({ item }) => (
-          <GestureWrapper innerElementWidth={300}>
-            <View style={styles.wrapper}>
-              <Card currentCard={item} />
-            </View>
-          </GestureWrapper>
+          <>
+            <CardBackground currentCard={item} />
+            <GestureWrapper innerElementWidth={300}>
+              <View style={styles.wrapper}>
+                <Card currentCard={item} />
+              </View>
+            </GestureWrapper>
+          </>
         )}
         keyExtractor={item => item?.name || 'default'}
         extraData={state.activeCard}
