@@ -100,11 +100,11 @@ export const AppContext = createContext<ContextProps>({
 const App = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   return (
-    <GestureHandlerRootView style={styles.root}>
-      <AppContext.Provider value={{ state, dispatch }}>
+    <AppContext.Provider value={{ state, dispatch }}>
+      <GestureHandlerRootView style={styles.root}>
         <RootRouter />
-      </AppContext.Provider>
-    </GestureHandlerRootView>
+      </GestureHandlerRootView>
+    </AppContext.Provider>
   );
 };
 

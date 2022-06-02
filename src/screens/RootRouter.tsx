@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { Home } from './Home';
 import { MyCards } from './MyCards';
@@ -9,6 +9,8 @@ import LinearGradient from 'react-native-linear-gradient';
 import { HomeSVG } from '../assets/SVGs/HomeSVG';
 import { CardSVG } from '../assets/SVGs/CardSVG';
 import { AnimatedWrapper } from '../components/AnimatedWrapper';
+import { AppContext } from '../../App';
+import { isEmptyObject } from '../utils/IsEmptyObject';
 
 const Tab = createBottomTabNavigator();
 
@@ -25,6 +27,8 @@ const AnimatedMyCards = () => (
 );
 
 export const RootRouter = () => {
+  const { state } = useContext(AppContext);
+
   return (
     <NavigationContainer>
       <Tab.Navigator
@@ -66,13 +70,15 @@ export const RootRouter = () => {
             title: 'Home',
           }}
         />
-        <Tab.Screen
-          name="MyCards"
-          component={AnimatedMyCards}
-          options={{
-            title: 'My Cards',
-          }}
-        />
+        {!isEmptyObject(state.cards) && (
+          <Tab.Screen
+            name="MyCards"
+            component={AnimatedMyCards}
+            options={{
+              title: 'My Cards',
+            }}
+          />
+        )}
       </Tab.Navigator>
     </NavigationContainer>
   );
