@@ -54,7 +54,7 @@ export const Card = ({ currentCard, advanced }: Props) => {
       ]}>
       <LinearGradient
         style={[styles.card]}
-        colors={[colors.darkBlueGradient, colors.lightBlueGradient]}
+        colors={currentCard.gradient}
         start={{ x: 0, y: 0.5 }}
         end={{ x: 1, y: 0.5 }}>
         <View style={styles.row}>

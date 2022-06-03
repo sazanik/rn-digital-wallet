@@ -1,7 +1,8 @@
 import React, { useCallback, useState } from 'react';
 import { FieldsTypes } from '../constants/FieldsTypes';
 import { ActionsTypes } from '../constants/ActionsTypes';
-import { Card } from '../models/Card';
+import { Card, GradientColor } from '../models/Card';
+import { getGradientColors } from '../utils/getGradientColors';
 
 interface Props {
   dispatch: React.Dispatch<{
@@ -19,6 +20,10 @@ export const useCardScope = ({ dispatch }: Props) => {
         name: '',
         balance: null,
         ...formData,
+        gradient: getGradientColors() as unknown as [
+          GradientColor,
+          GradientColor,
+        ],
         [field]: value,
       });
     },

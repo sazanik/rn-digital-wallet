@@ -11,6 +11,7 @@ import { CardSVG } from '../assets/SVGs/CardSVG';
 import { AnimatedWrapper } from '../components/AnimatedWrapper';
 import { AppContext } from '../../App';
 import { isEmptyObject } from '../utils/IsEmptyObject';
+import { gradientColors } from '../constants/gradientColors';
 
 const Tab = createBottomTabNavigator();
 
@@ -52,7 +53,10 @@ export const RootRouter = () => {
           tabBarHideOnKeyboard: true,
           tabBarBackground: () => (
             <LinearGradient
-              colors={[colors.darkBlueGradient, colors.lightBlueGradient]}
+              colors={[
+                gradientColors.darkBlueGradient,
+                gradientColors.lightBlueGradient,
+              ]}
               start={{ x: 0, y: 0.5 }}
               end={{ x: 1, y: 0.5 }}
               style={styles.tapBar}

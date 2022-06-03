@@ -2,6 +2,7 @@ import React from 'react';
 import { Pressable, StyleSheet, Text } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { colors } from '../../constants/colors';
+import { gradientColors } from '../../constants/gradientColors';
 
 interface Props {
   title?: string;
@@ -28,7 +29,10 @@ export const PrimaryButton = ({ title, onPress, disabled }: Props) => {
         colors={
           disabled
             ? [colors.warmGrey, colors.warmGrey]
-            : [colors.darkBlueGradient, colors.lightBlueGradient]
+            : [
+                gradientColors.darkBlueGradient,
+                gradientColors.lightBlueGradient,
+              ]
         }
         start={{ x: 0, y: 0.5 }}
         end={{ x: 1, y: 0.5 }}>

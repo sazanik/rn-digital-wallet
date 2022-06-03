@@ -7,6 +7,7 @@ import { checkInvalidData } from '../../utils/checkInvalidData';
 import { useTransactionScope } from '../../hooks/useTransactionScope';
 import { ModalLayout } from '../Layouts/ModalLayout';
 import { commonStyles } from '../../constants/commonStyles';
+import { Transaction } from '../../models/Transaction';
 
 interface Props {
   visible?: boolean;
@@ -21,7 +22,7 @@ export const TransactionModal = ({ visible }: Props) => {
     formData,
   } = useTransactionScope();
 
-  const isDisabled = checkInvalidData(formData);
+  const isDisabled = checkInvalidData(formData as Transaction);
 
   return (
     <ModalLayout
