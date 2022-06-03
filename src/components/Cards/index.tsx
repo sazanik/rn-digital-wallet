@@ -40,6 +40,7 @@ export const Card = ({ currentCard, advanced }: Props) => {
     });
   };
 
+  // const gradientColors = getGradientColors();
   const isActive = currentCard.name === state.activeCard;
 
   return (
