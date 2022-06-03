@@ -43,7 +43,11 @@ export const Home = (): JSX.Element => {
           ]}
           horizontal
           data={Object.values(state.cards) || []}
-          renderItem={({ item }) => <Card advanced currentCard={item} />}
+          renderItem={({ item }) => (
+            <View style={styles.cardWrapper}>
+              <Card advanced currentCard={item} />
+            </View>
+          )}
           keyExtractor={item => item?.name || 'default'}
           extraData={state.activeCard}
           ListEmptyComponent={EmptyCard}
@@ -84,6 +88,11 @@ const styles = StyleSheet.create({
     minHeight: 260,
     marginBottom: 20,
   },
+
+  cardWrapper: {
+    marginHorizontal: 10,
+  },
+
   transactionSubtitle: {
     width: '100%',
     marginBottom: 15,

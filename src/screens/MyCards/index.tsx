@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { ScreenLayout } from '../../components/Layouts/ScreenLayout';
-import { FlatList, StyleSheet } from 'react-native';
+import { FlatList, StyleSheet, useWindowDimensions, View } from 'react-native';
 import { AppContext } from '../../../App';
 import { Card } from '../../components/Cards';
 import { IconButton } from '../../components/Buttons/IconButton';
@@ -12,6 +12,7 @@ import { SwipeableWrapper } from '../../components/SwipeableWrapper';
 
 export const MyCards = () => {
   const { state, dispatch } = useContext(AppContext);
+  const { width } = useWindowDimensions();
 
   const addCardHandler = () => {
     dispatch({ type: ActionsTypes.SHOW_MODAL, payload: ModalTypes.CARD });
@@ -26,12 +27,14 @@ export const MyCards = () => {
   return (
     <ScreenLayout rightHeaderComponent={RightHeaderComponent} title="MyCards">
       <FlatList
-        contentContainerStyle={styles.cards}
+        contentContainerStyle={[styles.cards, { width }]}
         data={Object.values(state.cards) || []}
         renderItem={({ item }) => (
           <>
             <SwipeableWrapper currentItem={item}>
-              <Card currentCard={item} />
+              <View style={[styles.cardWrapper, { width }]}>
+                <Card currentCard={item} />
+              </View>
             </SwipeableWrapper>
           </>
         )}
@@ -44,8 +47,13 @@ export const MyCards = () => {
 
 const styles = StyleSheet.create({
   cards: {
-    width: '100%',
+    alignItems: 'center',
     minHeight: '100%',
     marginTop: 20,
+  },
+
+  cardWrapper: {
+    marginVertical: 10,
+    alignItems: 'center',
   },
 });

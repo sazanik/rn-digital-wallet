@@ -90,7 +90,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: 300,
     height: 200,
-    marginHorizontal: 10,
     borderRadius: 20,
     borderWidth: 3,
     backgroundColor: colors.warmGrey,
