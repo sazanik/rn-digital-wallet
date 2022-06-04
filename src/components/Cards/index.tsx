@@ -9,7 +9,7 @@ import { IconButton } from '../Buttons/IconButton';
 import { Card as CardProps } from '../../models/Card';
 import { ActionsTypes } from '../../constants/ActionsTypes';
 import { ModalTypes } from '../../constants/ModalTypes';
-import { AppContext } from '../../../App';
+import { AppContext } from '../../modules/context';
 
 interface Props {
   currentCard: CardProps;
@@ -36,11 +36,10 @@ export const Card = ({ currentCard, advanced }: Props) => {
   const handleLongPressCard = () => {
     dispatch({
       type: ActionsTypes.SET_ACTIVE_CARD,
-      payload: currentCard.name,
+      payload: currentCard?.name,
     });
   };
 
-  // const gradientColors = getGradientColors();
   const isActive = currentCard.name === state.activeCard;
 
   return (

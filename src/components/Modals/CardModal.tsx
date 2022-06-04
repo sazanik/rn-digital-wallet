@@ -1,20 +1,16 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { StyleSheet, TextInput, View } from 'react-native';
 import { colors } from '../../constants/colors';
 import { checkInvalidData } from '../../utils/checkInvalidData';
 import { ModalLayout } from '../Layouts/ModalLayout';
 import { useCardScope } from '../../hooks/useCardScope';
-import { AppContext } from '../../../App';
 
 interface Props {
   visible?: boolean;
 }
 
 export const CardModal = ({ visible }: Props) => {
-  const { dispatch } = useContext(AppContext);
-  const { handlePressButton, handleChangeText, formData } = useCardScope({
-    dispatch,
-  });
+  const { handlePressButton, handleChangeText, formData } = useCardScope();
 
   const isDisabled = checkInvalidData(formData);
 

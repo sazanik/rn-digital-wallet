@@ -9,9 +9,9 @@ import LinearGradient from 'react-native-linear-gradient';
 import { HomeSVG } from '../assets/SVGs/HomeSVG';
 import { CardSVG } from '../assets/SVGs/CardSVG';
 import { AnimatedWrapper } from '../components/AnimatedWrapper';
-import { AppContext } from '../../App';
-import { isEmptyObject } from '../utils/IsEmptyObject';
 import { gradientColors } from '../constants/gradientColors';
+import { isEmptyObject } from '../utils/IsEmptyObject';
+import { AppContext } from '../modules/context';
 
 const Tab = createBottomTabNavigator();
 
@@ -33,6 +33,7 @@ export const RootRouter = () => {
   return (
     <NavigationContainer>
       <Tab.Navigator
+        initialRouteName={state.activeScreen as string}
         sceneContainerStyle={{ backgroundColor: colors.white }}
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused }) => {

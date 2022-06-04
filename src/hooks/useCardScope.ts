@@ -1,17 +1,12 @@
-import React, { useCallback, useState } from 'react';
+import { useCallback, useContext, useState } from 'react';
 import { FieldsTypes } from '../constants/FieldsTypes';
 import { ActionsTypes } from '../constants/ActionsTypes';
 import { Card, GradientColor } from '../models/Card';
 import { getGradientColors } from '../utils/getGradientColors';
+import { AppContext } from '../modules/context';
 
-interface Props {
-  dispatch: React.Dispatch<{
-    type: ActionsTypes;
-    payload: Card | null;
-  }>;
-}
-
-export const useCardScope = ({ dispatch }: Props) => {
+export const useCardScope = () => {
+  const { dispatch } = useContext(AppContext);
   const [formData, setFormData] = useState<Card | null>(null);
 
   const handleChangeText = useCallback(
@@ -32,7 +27,6 @@ export const useCardScope = ({ dispatch }: Props) => {
 
   const handlePressButton = () => {
     dispatch({ type: ActionsTypes.ADD_CARD, payload: formData });
-
     setFormData(null);
   };
 

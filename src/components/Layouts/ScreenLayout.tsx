@@ -5,7 +5,7 @@ import { CardModal } from '../Modals/CardModal';
 import { StatusBar, StyleSheet, Text, View } from 'react-native';
 import { colors } from '../../constants/colors';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { AppContext } from '../../../App';
+import { AppContext } from '../../modules/context';
 
 interface Props {
   title: string;

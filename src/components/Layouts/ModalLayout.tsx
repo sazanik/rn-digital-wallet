@@ -5,7 +5,7 @@ import { PrimaryButton } from '../Buttons/PrimaryButton';
 import { commonStyles } from '../../constants/commonStyles';
 import { colors } from '../../constants/colors';
 import { ActionsTypes } from '../../constants/ActionsTypes';
-import { AppContext } from '../../../App';
+import { AppContext } from '../../modules/context';
 import {
   KeyboardAvoidingView,
   Modal,
@@ -31,16 +31,7 @@ export const ModalLayout = ({
 }: PropsWithChildren<Props>) => {
   const { dispatch } = useContext(AppContext);
   const handleCloseModal = () => {
-    dispatch({
-      type: ActionsTypes.HIDE_MODAL,
-      payload: null,
-    });
-  };
-
-  const handlePressButton = () => {
-    if (onPressButton) {
-      onPressButton();
-    }
+    dispatch({ payload: undefined, type: ActionsTypes.HIDE_MODAL });
   };
 
   return (
@@ -64,7 +55,7 @@ export const ModalLayout = ({
             <PrimaryButton
               disabled={disabled}
               title="Save"
-              onPress={handlePressButton}
+              onPress={onPressButton}
             />
           </View>
         </View>

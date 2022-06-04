@@ -6,11 +6,13 @@ import { Transaction } from '../../components/Transaction';
 import { ActionsTypes } from '../../constants/ActionsTypes';
 import { EmptyCard } from '../../components/Cards/EmptyCard';
 import { Card } from '../../components/Cards';
-import { AppContext } from '../../../App';
 import { NoTransactionsSVG } from '../../assets/SVGs/NoTransactionsSVG';
 import { ScreenLayout } from '../../components/Layouts/ScreenLayout';
+import { useNavigation } from '@react-navigation/native';
+import { AppContext } from '../../modules/context';
 
 export const Home = (): JSX.Element => {
+  const navigation = useNavigation();
   const { state, dispatch } = useContext(AppContext);
 
   const renderTransaction = ({ item }: { item: TransactionProps }) => (
@@ -18,7 +20,7 @@ export const Home = (): JSX.Element => {
   );
 
   useEffect(() => {
-    const namesCardsArray = Object.keys(state.cards);
+    const namesCardsArray = Object.keys(state?.cards || []);
 
     if (namesCardsArray.length === 1) {
       dispatch({
@@ -33,16 +35,34 @@ export const Home = (): JSX.Element => {
     }
   }, [dispatch, state.cards]);
 
+  useEffect(() => {
+    // @ts-ignore
+    const unsubscribe = navigation.addListener('tabPress', e => {
+      dispatch({
+        type: ActionsTypes.SET_SCREEN,
+        payload: e.target?.split('-')[0],
+      });
+    });
+
+    return unsubscribe;
+  }, [dispatch, navigation]);
+
+  useEffect(() => {
+    if (state.activeScreen) {
+      navigation.navigate(state?.activeScreen as any);
+    }
+  }, [navigation, state?.activeScreen]);
+
   return (
     <ScreenLayout title="Home">
       <View style={styles.cardsWrapper}>
         <FlatList
           contentContainerStyle={[
             styles.cards,
-            Object.keys(state.cards).length < 2 && styles.fullWidth,
+            Object.keys(state?.cards || []).length < 2 && styles.fullWidth,
           ]}
           horizontal
-          data={Object.values(state.cards) || []}
+          data={Object.values(state?.cards || [])}
           renderItem={({ item }) => (
             <View style={styles.cardWrapper}>
               <Card advanced currentCard={item} />
@@ -88,11 +108,9 @@ const styles = StyleSheet.create({
     minHeight: 260,
     marginBottom: 20,
   },
-
   cardWrapper: {
     marginHorizontal: 10,
   },
-
   transactionSubtitle: {
     width: '100%',
     marginBottom: 15,

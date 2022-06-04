@@ -2,9 +2,9 @@ import React, { useContext } from 'react';
 import { Pressable, StyleSheet, Text } from 'react-native';
 import { colors } from '../../constants/colors';
 import { AddSVG } from '../../assets/SVGs/AddSVG';
-import { AppContext } from '../../../App';
 import { ActionsTypes } from '../../constants/ActionsTypes';
 import { ModalTypes } from '../../constants/ModalTypes';
+import { AppContext } from '../../modules/context';
 
 export const EmptyCard = () => {
   const { dispatch } = useContext(AppContext);

@@ -5,7 +5,7 @@ import { FieldsTypes } from '../constants/FieldsTypes';
 import { transactionsOptions } from '../components/Toggle/options';
 import { TransactionsTypes } from '../constants/TransactionsTypes';
 import { ActionsTypes } from '../constants/ActionsTypes';
-import { AppContext } from '../../App';
+import { AppContext } from '../modules/context';
 
 export const useTransactionScope = () => {
   const { state, dispatch } = useContext(AppContext);
@@ -28,7 +28,7 @@ export const useTransactionScope = () => {
   );
 
   const handlePressButton = useCallback(() => {
-    if (!state.activeCard) {
+    if (!state?.activeCard) {
       return;
     }
     const currentBalance = Number(state?.cards[state.activeCard].balance);
@@ -46,7 +46,7 @@ export const useTransactionScope = () => {
       payload: newBalance[transactionsOptions[toggleActiveId]],
     });
     setFormData(null);
-  }, [dispatch, formData, state.activeCard, state?.cards, toggleActiveId]);
+  }, [dispatch, formData, state, toggleActiveId]);
 
   const handleToggle = (id: ToggleIds) => {
     setToggleActiveId(id);

@@ -1,7 +1,6 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { ScreenLayout } from '../../components/Layouts/ScreenLayout';
 import { FlatList, StyleSheet, useWindowDimensions, View } from 'react-native';
-import { AppContext } from '../../../App';
 import { Card } from '../../components/Cards';
 import { IconButton } from '../../components/Buttons/IconButton';
 import { AddSVG } from '../../assets/SVGs/AddSVG';
@@ -9,8 +8,11 @@ import { ActionsTypes } from '../../constants/ActionsTypes';
 import { ModalTypes } from '../../constants/ModalTypes';
 import { colors } from '../../constants/colors';
 import { SwipeableWrapper } from '../../components/SwipeableWrapper';
+import { useNavigation } from '@react-navigation/native';
+import { AppContext } from '../../modules/context';
 
 export const MyCards = () => {
+  const navigation = useNavigation();
   const { state, dispatch } = useContext(AppContext);
   const { width } = useWindowDimensions();
 
@@ -24,11 +26,23 @@ export const MyCards = () => {
     </IconButton>
   );
 
+  useEffect(() => {
+    // @ts-ignore
+    const unsubscribe = navigation.addListener('tabPress', e => {
+      dispatch({
+        type: ActionsTypes.SET_SCREEN,
+        payload: e.target?.split('-')[0],
+      });
+    });
+
+    return unsubscribe;
+  }, [dispatch, navigation]);
+
   return (
     <ScreenLayout rightHeaderComponent={RightHeaderComponent} title="MyCards">
       <FlatList
         contentContainerStyle={[styles.cards, { width }]}
-        data={Object.values(state.cards) || []}
+        data={Object.values(state?.cards || [])}
         renderItem={({ item }) => (
           <>
             <SwipeableWrapper currentItem={item}>

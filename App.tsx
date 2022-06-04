@@ -1,119 +1,35 @@
 import * as React from 'react';
-import { createContext, Dispatch, useReducer } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 import { RootRouter } from './src/screens/RootRouter';
-import { State } from './src/models/State';
 import { ActionsTypes } from './src/constants/ActionsTypes';
-import { ModalTypes } from './src/constants/ModalTypes';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { StyleSheet } from 'react-native';
-
-const initialState: State = {
-  activeModal: null,
-  activeCard: null,
-  cards: {},
-};
-
-const reducer = (
-  state: State,
-  action: { type: ActionsTypes; payload: any },
-): State => {
-  switch (action.type) {
-    case ActionsTypes.SHOW_MODAL:
-      return {
-        ...state,
-        activeModal: action.payload as ModalTypes,
-      };
-
-    case ActionsTypes.HIDE_MODAL:
-      return {
-        ...state,
-        activeModal: null,
-      };
-
-    case ActionsTypes.ADD_CARD:
-      return {
-        ...state,
-        cards: {
-          ...state.cards,
-          [action.payload.name]: action.payload,
-        },
-      };
-
-    case ActionsTypes.DELETE_CARD:
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { [action.payload]: deletedCard, ...otherCards } = state.cards;
-
-      return {
-        ...state,
-        cards: {
-          ...otherCards,
-        },
-      };
-
-    case ActionsTypes.ADD_TRANSACTION: {
-      if (!state.activeCard) {
-        return state;
-      }
-
-      return {
-        ...state,
-        cards: {
-          ...state.cards,
-          [state.activeCard]: {
-            ...state.cards[state.activeCard],
-            transactions: [
-              ...(state.cards[state.activeCard].transactions || []),
-              action.payload,
-            ],
-          },
-        },
-      };
-    }
-
-    case ActionsTypes.UPDATE_BALANCE: {
-      if (!state.activeCard) {
-        return state;
-      }
-
-      return {
-        ...state,
-        cards: {
-          ...state.cards,
-          [state.activeCard]: {
-            ...state.cards[state.activeCard],
-            balance: action.payload,
-          },
-        },
-      };
-    }
-
-    case ActionsTypes.SET_ACTIVE_CARD:
-      return {
-        ...state,
-        activeCard: action.payload,
-      };
-
-    default:
-      return state;
-  }
-};
-
-export type ContextProps = {
-  state: State;
-  dispatch: Dispatch<{ type: ActionsTypes; payload: any }>;
-};
-
-export const AppContext = createContext<ContextProps>({
-  state: initialState,
-  dispatch: () => {},
-});
+import { getAllData, getData } from './src/modules/asyncStorage';
+import { mainReducer } from './src/reducers/mainReducer';
+import { AppContext, initialState } from './src/modules/context';
+import { StorageKeys } from './src/constants/StorageKeys';
 
 const App = () => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(mainReducer, initialState);
+
+  const [isLoading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getData(StorageKeys.STATE).then(data => {
+      console.log('------ITEM', data);
+      setLoading(false);
+      dispatch({ type: ActionsTypes.SET_STATE, payload: data });
+    });
+  }, []);
+
+  useEffect(() => {
+    getAllData();
+  }, [state]);
+
   return (
     <AppContext.Provider value={{ state, dispatch }}>
       <GestureHandlerRootView style={styles.root}>
-        <RootRouter />
+        {!isLoading && <RootRouter />}
       </GestureHandlerRootView>
     </AppContext.Provider>
   );

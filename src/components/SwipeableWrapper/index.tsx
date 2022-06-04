@@ -2,12 +2,12 @@ import React, { PropsWithChildren, useContext } from 'react';
 import Animated from 'react-native-reanimated';
 import { Swipeable } from 'react-native-gesture-handler';
 import { colors } from '../../constants/colors';
-import { AppContext } from '../../../App';
 import { ActionsTypes } from '../../constants/ActionsTypes';
 import { StyleSheet, useWindowDimensions } from 'react-native';
 import { IconButton } from '../Buttons/IconButton';
 import { TrashSVG } from '../../assets/SVGs/TrashSVG';
 import { Card } from '../../models/Card';
+import { AppContext } from '../../modules/context';
 
 interface Props {
   currentItem: Card;
@@ -20,7 +20,6 @@ export const SwipeableWrapper = ({
   const { dispatch } = useContext(AppContext);
   const { width } = useWindowDimensions();
   const indent = (width - 300) / 2;
-  console.log(width, indent);
   const deleteCardHandler = () => {
     dispatch({ type: ActionsTypes.DELETE_CARD, payload: currentItem.name });
   };
