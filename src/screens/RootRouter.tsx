@@ -10,8 +10,9 @@ import { HomeSVG } from '../assets/SVGs/HomeSVG';
 import { CardSVG } from '../assets/SVGs/CardSVG';
 import { AnimatedWrapper } from '../components/AnimatedWrapper';
 import { gradientColors } from '../constants/gradientColors';
-import { isEmptyObject } from '../utils/IsEmptyObject';
 import { AppContext } from '../modules/context';
+import { Loader } from '../components/Loader';
+import { ActionsTypes } from '../constants/ActionsTypes';
 
 const Tab = createBottomTabNavigator();
 
@@ -28,12 +29,20 @@ const AnimatedMyCards = () => (
 );
 
 export const RootRouter = () => {
-  const { state } = useContext(AppContext);
+  const { state, dispatch } = useContext(AppContext);
+
+  if (!state?.activeScreen) {
+    return <Loader />;
+  }
 
   return (
-    <NavigationContainer>
+    <NavigationContainer
+      onStateChange={navState => {
+        const { routeNames = ['Home'], index = 0 } = navState || {};
+        dispatch({ type: ActionsTypes.SET_SCREEN, payload: routeNames[index] });
+      }}>
       <Tab.Navigator
-        initialRouteName={state.activeScreen as string}
+        initialRouteName={state.activeScreen}
         sceneContainerStyle={{ backgroundColor: colors.white }}
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused }) => {
@@ -75,15 +84,13 @@ export const RootRouter = () => {
             title: 'Home',
           }}
         />
-        {!isEmptyObject(state.cards) && (
-          <Tab.Screen
-            name="MyCards"
-            component={AnimatedMyCards}
-            options={{
-              title: 'My Cards',
-            }}
-          />
-        )}
+        <Tab.Screen
+          name="MyCards"
+          component={AnimatedMyCards}
+          options={{
+            title: 'My Cards',
+          }}
+        />
       </Tab.Navigator>
     </NavigationContainer>
   );

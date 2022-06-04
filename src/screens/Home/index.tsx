@@ -1,35 +1,20 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { colors } from '../../constants/colors';
 import { Transaction as TransactionProps } from '../../models/Transaction';
 import { Transaction } from '../../components/Transaction';
-import { ActionsTypes } from '../../constants/ActionsTypes';
 import { EmptyCard } from '../../components/Cards/EmptyCard';
 import { Card } from '../../components/Cards';
 import { NoTransactionsSVG } from '../../assets/SVGs/NoTransactionsSVG';
 import { ScreenLayout } from '../../components/Layouts/ScreenLayout';
-import { useNavigation } from '@react-navigation/native';
 import { AppContext } from '../../modules/context';
 
 export const Home = (): JSX.Element => {
-  const navigation = useNavigation();
-  const { state, dispatch } = useContext(AppContext);
+  const { state } = useContext(AppContext);
 
   const renderTransaction = ({ item }: { item: TransactionProps }) => (
     <Transaction {...item} />
   );
-
-  useEffect(() => {
-    // @ts-ignore
-    const unsubscribe = navigation.addListener('tabPress', e => {
-      dispatch({
-        type: ActionsTypes.SET_SCREEN,
-        payload: e.target?.split('-')[0],
-      });
-    });
-
-    return unsubscribe;
-  }, [dispatch, navigation]);
 
   return (
     <ScreenLayout title="Home">

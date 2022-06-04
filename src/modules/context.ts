@@ -8,7 +8,7 @@ interface Context {
 }
 
 export const initialState: State = {
-  activeScreen: 'Home',
+  activeScreen: null,
   activeModal: null,
   activeCard: null,
   cards: {},

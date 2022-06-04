@@ -4,10 +4,11 @@ import { RootRouter } from './src/screens/RootRouter';
 import { ActionsTypes } from './src/constants/ActionsTypes';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { StyleSheet } from 'react-native';
-import { getAllData, getData } from './src/modules/asyncStorage';
+import { getData } from './src/modules/asyncStorage';
 import { mainReducer } from './src/reducers/mainReducer';
 import { AppContext, initialState } from './src/modules/context';
 import { StorageKeys } from './src/constants/StorageKeys';
+import { Loader } from './src/components/Loader';
 
 const App = () => {
   const [state, dispatch] = useReducer(mainReducer, initialState);
@@ -21,14 +22,10 @@ const App = () => {
     });
   }, []);
 
-  useEffect(() => {
-    getAllData();
-  }, [state]);
-
   return (
     <AppContext.Provider value={{ state, dispatch }}>
       <GestureHandlerRootView style={styles.root}>
-        {!isLoading && <RootRouter />}
+        {isLoading ? <Loader /> : <RootRouter />}
       </GestureHandlerRootView>
     </AppContext.Provider>
   );
