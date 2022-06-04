@@ -9,6 +9,7 @@ import { mainReducer } from './src/reducers/mainReducer';
 import { AppContext, initialState } from './src/modules/context';
 import { StorageKeys } from './src/constants/StorageKeys';
 import { Loader } from './src/components/Loader';
+import { State } from './src/models/State';
 
 const App = () => {
   const [state, dispatch] = useReducer(mainReducer, initialState);
@@ -16,8 +17,15 @@ const App = () => {
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
-    getData(StorageKeys.STATE).then(data => {
-      dispatch({ type: ActionsTypes.SET_STATE, payload: data });
+    getData(StorageKeys.STATE).then((data: State) => {
+      if (!data?.activeScreen) {
+        dispatch({
+          type: ActionsTypes.SET_STATE,
+          payload: { ...data, activeScreen: 'Home' },
+        });
+      } else {
+        dispatch({ type: ActionsTypes.SET_STATE, payload: data });
+      }
     });
   }, []);
 
