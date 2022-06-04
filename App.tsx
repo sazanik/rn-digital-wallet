@@ -17,10 +17,15 @@ const App = () => {
 
   useEffect(() => {
     getData(StorageKeys.STATE).then(data => {
-      setLoading(false);
       dispatch({ type: ActionsTypes.SET_STATE, payload: data });
     });
   }, []);
+
+  useEffect(() => {
+    if (state?.activeScreen) {
+      setLoading(false);
+    }
+  }, [state?.activeScreen]);
 
   return (
     <AppContext.Provider value={{ state, dispatch }}>

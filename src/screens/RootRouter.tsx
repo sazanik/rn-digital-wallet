@@ -11,7 +11,6 @@ import { CardSVG } from '../assets/SVGs/CardSVG';
 import { AnimatedWrapper } from '../components/AnimatedWrapper';
 import { gradientColors } from '../constants/gradientColors';
 import { AppContext } from '../modules/context';
-import { Loader } from '../components/Loader';
 import { ActionsTypes } from '../constants/ActionsTypes';
 
 const Tab = createBottomTabNavigator();
@@ -31,10 +30,6 @@ const AnimatedMyCards = () => (
 export const RootRouter = () => {
   const { state, dispatch } = useContext(AppContext);
 
-  if (!state?.activeScreen) {
-    return <Loader />;
-  }
-
   return (
     <NavigationContainer
       onStateChange={navState => {
@@ -42,7 +37,7 @@ export const RootRouter = () => {
         dispatch({ type: ActionsTypes.SET_SCREEN, payload: routeNames[index] });
       }}>
       <Tab.Navigator
-        initialRouteName={state.activeScreen}
+        initialRouteName={state?.activeScreen || 'Home'}
         sceneContainerStyle={{ backgroundColor: colors.white }}
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused }) => {

@@ -8,6 +8,7 @@ import { Card } from '../../components/Cards';
 import { NoTransactionsSVG } from '../../assets/SVGs/NoTransactionsSVG';
 import { ScreenLayout } from '../../components/Layouts/ScreenLayout';
 import { AppContext } from '../../modules/context';
+import { isEmptyObject } from '../../utils/IsEmptyObject';
 
 export const Home = (): JSX.Element => {
   const { state } = useContext(AppContext);
@@ -36,7 +37,7 @@ export const Home = (): JSX.Element => {
           ListEmptyComponent={EmptyCard}
         />
       </View>
-      {state.activeCard && (
+      {state.activeCard && !isEmptyObject(state.cards) && (
         <View style={styles.horizontalWrapper}>
           {state.cards[state.activeCard]?.transactions?.length && (
             <Text style={styles.transactionSubtitle}>Last transactions</Text>
