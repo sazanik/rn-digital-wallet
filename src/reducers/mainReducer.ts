@@ -1,7 +1,7 @@
 import { State } from '../models/State';
 import { ActionsTypes } from '../constants/ActionsTypes';
 import { ModalTypes } from '../constants/ModalTypes';
-import { updateData } from '../modules/asyncStorage';
+import { setData, updateData } from '../modules/asyncStorage';
 import { StorageKeys } from '../constants/StorageKeys';
 
 export const mainReducer = (
@@ -30,21 +30,32 @@ export const mainReducer = (
       return newState;
     }
 
-    case ActionsTypes.SHOW_MODAL:
-      return {
+    case ActionsTypes.SHOW_MODAL: {
+      const newState = {
         ...state,
         activeModal: action.payload as ModalTypes,
       };
 
-    case ActionsTypes.HIDE_MODAL:
-      return {
+      updateData(StorageKeys.STATE, newState);
+
+      return newState;
+    }
+
+    case ActionsTypes.HIDE_MODAL: {
+      const newState = {
         ...state,
         activeModal: null,
       };
 
+      updateData(StorageKeys.STATE, newState);
+
+      return newState;
+    }
+
     case ActionsTypes.ADD_CARD: {
       const newState = {
         ...state,
+        activeCard: action.payload.name,
         cards: {
           ...state.cards,
           [action.payload.name]: action.payload,
@@ -66,7 +77,7 @@ export const mainReducer = (
         },
       };
 
-      updateData(StorageKeys.STATE, newState);
+      setData(StorageKeys.STATE, newState);
 
       return newState;
     }

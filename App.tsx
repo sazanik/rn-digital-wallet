@@ -16,7 +16,6 @@ const App = () => {
 
   useEffect(() => {
     getData(StorageKeys.STATE).then(data => {
-      console.log('------ITEM', data);
       setLoading(false);
       dispatch({ type: ActionsTypes.SET_STATE, payload: data });
     });

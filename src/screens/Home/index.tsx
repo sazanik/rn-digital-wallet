@@ -20,22 +20,6 @@ export const Home = (): JSX.Element => {
   );
 
   useEffect(() => {
-    const namesCardsArray = Object.keys(state?.cards || []);
-
-    if (namesCardsArray.length === 1) {
-      dispatch({
-        type: ActionsTypes.SET_ACTIVE_CARD,
-        payload: namesCardsArray[0],
-      });
-    } else if (!namesCardsArray.length) {
-      dispatch({
-        type: ActionsTypes.SET_ACTIVE_CARD,
-        payload: null,
-      });
-    }
-  }, [dispatch, state.cards]);
-
-  useEffect(() => {
     // @ts-ignore
     const unsubscribe = navigation.addListener('tabPress', e => {
       dispatch({
@@ -46,12 +30,6 @@ export const Home = (): JSX.Element => {
 
     return unsubscribe;
   }, [dispatch, navigation]);
-
-  useEffect(() => {
-    if (state.activeScreen) {
-      navigation.navigate(state?.activeScreen as any);
-    }
-  }, [navigation, state?.activeScreen]);
 
   return (
     <ScreenLayout title="Home">
