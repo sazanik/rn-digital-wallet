@@ -4,8 +4,10 @@
   "private": true,
   "scripts": {
     "android": "react-native run-android",
-    "ios": "react-native run-ios",
+    "iphone": "react-native run-ios",
+    "ipad": "react-native run-ios --simulator='iPad Pro (12.9-inch) (5th generation)'",
     "start": "react-native start",
+    "start port 1234": "react-native start --port=1234",
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
